@@ -23,13 +23,13 @@ function readEntryFields(formData: FormData) {
   } satisfies Partial<NewEntryRow>;
 }
 
-async function authorName(userId: string) {
+async function authorName() {
   const user = await currentUser();
   return (
-    user?.username ??
-    user?.fullName ??
-    user?.primaryEmailAddress?.emailAddress ??
-    userId
+    user?.fullName?.trim() ||
+    user?.username?.trim() ||
+    user?.primaryEmailAddress?.emailAddress ||
+    "Corp member"
   );
 }
 
@@ -50,7 +50,7 @@ export async function submitEntryAction(formData: FormData) {
     .values({
       ...fields,
       authorId: userId,
-      authorName: await authorName(userId),
+      authorName: await authorName(),
       status: fields.type === "story" ? "approved" : "pending",
     });
 
