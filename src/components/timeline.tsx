@@ -73,6 +73,53 @@ export function Timeline({
               >
                 {entry.body}
               </p>
+              {(entry.image_url ||
+                entry.youtube_url ||
+                entry.killboard_url ||
+                entry.other_url) && (
+                <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs">
+                  {entry.image_url && (
+                    <a
+                      href={entry.image_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      Image
+                    </a>
+                  )}
+                  {entry.youtube_url && (
+                    <a
+                      href={entry.youtube_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      Video
+                    </a>
+                  )}
+                  {entry.killboard_url && (
+                    <a
+                      href={entry.killboard_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      Battle report
+                    </a>
+                  )}
+                  {entry.other_url && (
+                    <a
+                      href={entry.other_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      Link
+                    </a>
+                  )}
+                </div>
+              )}
               <div className="mt-3 flex items-baseline justify-between gap-4">
                 <p className="text-xs text-muted-foreground">
                   — {entry.author_name}

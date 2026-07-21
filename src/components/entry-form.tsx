@@ -100,6 +100,40 @@ export function EntryForm({
         />
       </div>
 
+      <div className="space-y-2">
+        <Label htmlFor="youtube_url">YouTube link (optional)</Label>
+        <Input
+          id="youtube_url"
+          name="youtube_url"
+          type="url"
+          placeholder="https://youtube.com/watch?v=..."
+          defaultValue={defaultValues?.youtube_url}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="killboard_url">
+          Battle report / killmail (zKillboard) link (optional)
+        </Label>
+        <Input
+          id="killboard_url"
+          name="killboard_url"
+          type="url"
+          placeholder="https://zkillboard.com/..."
+          defaultValue={defaultValues?.killboard_url}
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="other_url">Other link (optional)</Label>
+        <Input
+          id="other_url"
+          name="other_url"
+          type="url"
+          defaultValue={defaultValues?.other_url}
+        />
+      </div>
+
       <Button type="submit">{submitLabel}</Button>
     </form>
   );

@@ -13,6 +13,9 @@ function readEntryFields(formData: FormData) {
     event_date: formData.get("event_date"),
     date_precision: formData.get("date_precision"),
     image_url: formData.get("image_url") || null,
+    youtube_url: formData.get("youtube_url") || null,
+    killboard_url: formData.get("killboard_url") || null,
+    other_url: formData.get("other_url") || null,
   };
 }
 

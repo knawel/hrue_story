@@ -10,6 +10,9 @@ export type Entry = {
   event_date: string;
   date_precision: DatePrecision;
   image_url?: string;
+  youtube_url?: string;
+  killboard_url?: string;
+  other_url?: string;
   author_id: string;
   author_name: string;
   status: EntryStatus;

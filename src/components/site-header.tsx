@@ -9,7 +9,7 @@ export async function SiteHeader() {
     <header className="border-b">
       <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
         <Link href="/" className="font-semibold">
-          Corp History Timeline
+          HRUE
         </Link>
         <div className="flex items-center gap-4 text-sm">
           {(role === "member" || role === "officer") && (

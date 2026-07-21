@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Corp History Timeline",
-  description: "A crowd-sourced timeline of our corp's history.",
+  title: "HRUE — Holy Russian Empire",
+  description: "A crowd-sourced history timeline of the HRUE corporation.",
 };
 
 export default function RootLayout({

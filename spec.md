@@ -72,7 +72,9 @@ the year.
 - **Timeline (`/`)** — public. All `approved` entries, chronological, milestones
   and stories visually distinct. The front door.
 - **Add entry** — auth-required (modal or `/submit`). Fields: type, title, body,
-  date + precision, optional image URL. Author = logged-in Clerk user.
+  date + precision, optional image URL, optional YouTube link, optional
+  zKillboard battle report / killmail link, optional other link. Author =
+  logged-in Clerk user.
 - **Review queue (`/review`)** — officer-only. Lists `pending` milestones with
   approve / reject.
 - **Edit entry** — author or officer. Same form as add.
@@ -114,6 +116,9 @@ One primary table, `entries` (Postgres / Neon):
 | `event_date`     | date        | Anchor point |
 | `date_precision` | text/enum   | `"day" \| "month" \| "year"` |
 | `image_url`      | text        | Optional |
+| `youtube_url`     | text        | Optional — linked video |
+| `killboard_url`   | text        | Optional — zKillboard battle report / killmail |
+| `other_url`       | text        | Optional — any other reference link |
 | `author_id`      | text        | Clerk user id |
 | `author_name`    | text        | Denormalized display name at creation |
 | `status`         | text/enum   | `"pending" \| "approved" \| "rejected"` |
