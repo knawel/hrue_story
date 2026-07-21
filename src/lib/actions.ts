@@ -25,11 +25,7 @@ function readEntryFields(formData: FormData) {
 
 async function authorName() {
   const user = await currentUser();
-  const gameName = (
-    user?.unsafeMetadata?.game_name as string | undefined
-  )?.trim();
   return (
-    gameName ||
     user?.fullName?.trim() ||
     user?.username?.trim() ||
     user?.primaryEmailAddress?.emailAddress ||

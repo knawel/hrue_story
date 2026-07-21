@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { Gamepad2 } from "lucide-react";
 import { Show, SignInButton, UserButton } from "@clerk/nextjs";
-import { GameNamePage } from "@/components/game-name-page";
 import { getRole } from "@/lib/get-role";
 
 export async function SiteHeader() {
@@ -32,15 +30,7 @@ export async function SiteHeader() {
             </SignInButton>
           </Show>
           <Show when="signed-in">
-            <UserButton>
-              <UserButton.UserProfilePage
-                label="Game name"
-                url="game-name"
-                labelIcon={<Gamepad2 className="size-4" />}
-              >
-                <GameNamePage />
-              </UserButton.UserProfilePage>
-            </UserButton>
+            <UserButton />
           </Show>
         </div>
       </div>
