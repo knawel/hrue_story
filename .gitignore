@@ -1,8 +1,7 @@
 # secrets
 .env
-.env*.local
-.env.development
-.env.production
+.env.local
+.env.*.local
 
 # dependencies
 node_modules/
@@ -15,9 +14,6 @@ dist/
 
 # Vercel
 .vercel
-
-# Drizzle
-drizzle/
 
 # logs
 npm-debug.log*
