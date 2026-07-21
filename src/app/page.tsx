@@ -1,8 +1,14 @@
+import { auth } from "@clerk/nextjs/server";
 import { getEntries } from "@/lib/get-entries";
+import { getRole } from "@/lib/get-role";
 import { Timeline } from "@/components/timeline";
 
 export default async function Home() {
-  const entries = await getEntries();
+  const [entries, role, { userId }] = await Promise.all([
+    getEntries(),
+    getRole(),
+    auth(),
+  ]);
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-16">
@@ -11,7 +17,7 @@ export default async function Home() {
         Milestones and stories from across the corp, in one place.
       </p>
       <div className="mt-10">
-        <Timeline entries={entries} />
+        <Timeline entries={entries} currentUserId={userId} role={role} />
       </div>
     </div>
   );

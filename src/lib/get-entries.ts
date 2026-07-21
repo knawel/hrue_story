@@ -20,3 +20,7 @@ export async function getPendingMilestones(): Promise<Entry[]> {
     ),
   );
 }
+
+export async function getEntryById(id: string): Promise<Entry | undefined> {
+  return placeholderEntries.find((e) => e.id === id);
+}
