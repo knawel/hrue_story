@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { formatEntryDate } from "@/lib/format-entry-date";
@@ -47,6 +48,11 @@ export default async function ReviewPage() {
                   Reject
                 </Button>
               </form>
+              <Button
+                size="sm"
+                variant="ghost"
+                render={<Link href={`/submit/${entry.id}`}>Edit</Link>}
+              />
             </div>
           </div>
         ))}
