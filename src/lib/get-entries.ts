@@ -1,26 +1,59 @@
-import { placeholderEntries } from "@/lib/placeholder-data";
+import { and, asc, eq } from "drizzle-orm";
+import { getDb } from "@/lib/db/client";
+import { entries as entriesTable } from "@/lib/db/schema";
 import { Entry } from "@/lib/types";
 
-function sortEntries(entries: Entry[]): Entry[] {
-  return [...entries].sort((a, b) => {
-    const byDate = a.event_date.localeCompare(b.event_date);
-    if (byDate !== 0) return byDate;
-    return a.created_at.localeCompare(b.created_at);
-  });
+function rowToEntry(row: typeof entriesTable.$inferSelect): Entry {
+  return {
+    id: row.id,
+    type: row.type,
+    title: row.title,
+    body: row.body,
+    event_date: row.eventDate,
+    date_precision: row.datePrecision,
+    image_url: row.imageUrl ?? undefined,
+    youtube_url: row.youtubeUrl ?? undefined,
+    killboard_url: row.killboardUrl ?? undefined,
+    other_url: row.otherUrl ?? undefined,
+    author_id: row.authorId,
+    author_name: row.authorName,
+    status: row.status,
+    created_at: row.createdAt,
+    updated_at: row.updatedAt,
+  };
 }
 
 export async function getEntries(): Promise<Entry[]> {
-  return sortEntries(placeholderEntries.filter((e) => e.status === "approved"));
+  const rows = await getDb()
+    .select()
+    .from(entriesTable)
+    .where(eq(entriesTable.status, "approved"))
+    .orderBy(asc(entriesTable.eventDate), asc(entriesTable.createdAt));
+
+  return rows.map(rowToEntry);
 }
 
 export async function getPendingMilestones(): Promise<Entry[]> {
-  return sortEntries(
-    placeholderEntries.filter(
-      (e) => e.status === "pending" && e.type === "milestone",
-    ),
-  );
+  const rows = await getDb()
+    .select()
+    .from(entriesTable)
+    .where(
+      and(
+        eq(entriesTable.status, "pending"),
+        eq(entriesTable.type, "milestone"),
+      ),
+    )
+    .orderBy(asc(entriesTable.eventDate), asc(entriesTable.createdAt));
+
+  return rows.map(rowToEntry);
 }
 
 export async function getEntryById(id: string): Promise<Entry | undefined> {
-  return placeholderEntries.find((e) => e.id === id);
+  const [row] = await getDb()
+    .select()
+    .from(entriesTable)
+    .where(eq(entriesTable.id, id))
+    .limit(1);
+
+  return row ? rowToEntry(row) : undefined;
 }
