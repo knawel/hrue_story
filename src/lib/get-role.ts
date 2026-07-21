@@ -5,5 +5,6 @@ export type Role = "member" | "officer";
 export async function getRole(): Promise<Role | null> {
   const user = await currentUser();
   if (!user) return null;
-  return user.publicMetadata?.role === "officer" ? "officer" : "member";
+  const role = user.publicMetadata?.role;
+  return role === "officer" || role === "member" ? role : null;
 }

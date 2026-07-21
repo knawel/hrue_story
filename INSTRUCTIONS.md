@@ -150,7 +150,10 @@ no database yet.
 ## First-run smoke test (after Step 2)
 
 - Visit the site logged out → timeline is visible.
-- Log in with Discord → name shows in the header.
+- Log in with Discord, no role assigned yet → no "Add entry" link, `/submit`
+  redirects home. Login alone grants no write access.
+- Set your Clerk user `publicMetadata.role` to `"member"` → "Add entry" link
+  appears.
 - Add a story → appears on the public timeline immediately.
 - Add a milestone → does NOT appear yet.
 - Set your Clerk user `publicMetadata.role` to `"officer"` → `/review` shows the

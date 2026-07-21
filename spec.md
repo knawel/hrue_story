@@ -30,18 +30,21 @@ authorship, and a presentation people actually want to look at.
 ## 2. Access model
 
 - **Viewing is public.** Anyone, logged in or not, can read the timeline.
-- **Editing requires login.** Adding, editing, approving — all gated behind
-  Clerk auth, using **Discord** sign-in (the corp already knows everyone by
-  Discord handle, so this doubles as trustworthy attribution).
+- **Editing requires an assigned role, not just login.** Discord sign-in alone
+  grants no write access — an officer must manually set
+  `publicMetadata.role = "member"` (or `"officer"`) in the Clerk dashboard
+  before a user can add or edit anything. This is deliberate: it stops any
+  random Discord login from getting write access by default.
 
-| Role    | Who                      | Can do |
-|---------|--------------------------|--------|
-| Visitor | Not logged in            | Read approved content only |
-| Member  | Logged in via Discord    | Add stories, propose milestones, edit/delete own entries |
-| Officer | Member with officer role | All member actions + approve/reject milestones + edit/delete any entry |
+| Role    | Who                                          | Can do |
+|---------|-----------------------------------------------|--------|
+| Visitor | Not logged in, or logged in with no role set | Read approved content only |
+| Member  | Logged in + `role: "member"` in Clerk        | Add stories, propose milestones, edit/delete own entries |
+| Officer | Logged in + `role: "officer"` in Clerk       | All member actions + approve/reject milestones + edit/delete any entry |
 
-Roles live in Clerk `publicMetadata.role = "member" | "officer"`. The officer
-set is small and managed by hand in the Clerk dashboard for v1.
+Roles live in Clerk `publicMetadata.role = "member" | "officer"`. Both roles
+are assigned by hand in the Clerk dashboard for v1 — there's no self-serve
+path into either one.
 
 ## 3. Core concepts
 
@@ -91,6 +94,9 @@ Behaviors:
 | Edit/delete own entry       | ❌ | ✅ | ✅ |
 | Edit/delete any entry       | ❌ | ❌ | ✅ |
 | Approve/reject milestone    | ❌ | ❌ | ✅ |
+
+"Visitor" here includes anyone logged in via Discord who hasn't been assigned
+a role yet — login alone doesn't promote you to Member.
 
 Permission checks are enforced **server-side** (server actions / route
 handlers), never only in the UI.

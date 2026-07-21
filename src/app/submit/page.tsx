@@ -1,11 +1,11 @@
 import { redirect } from "next/navigation";
-import { auth } from "@clerk/nextjs/server";
 import { EntryForm } from "@/components/entry-form";
 import { submitEntryAction } from "@/lib/actions";
+import { getRole } from "@/lib/get-role";
 
 export default async function SubmitPage() {
-  const { userId } = await auth();
-  if (!userId) redirect("/");
+  const role = await getRole();
+  if (!role) redirect("/");
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">

@@ -25,8 +25,9 @@ export function Timeline({
     <ol className="relative border-l pl-6">
       {entries.map((entry) => {
         const canEdit =
-          role === "officer" ||
-          (!!currentUserId && entry.author_id === currentUserId);
+          !!role &&
+          (role === "officer" ||
+            (!!currentUserId && entry.author_id === currentUserId));
 
         return (
           <li

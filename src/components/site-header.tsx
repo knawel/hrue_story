@@ -12,11 +12,11 @@ export async function SiteHeader() {
           Corp History Timeline
         </Link>
         <div className="flex items-center gap-4 text-sm">
-          <Show when="signed-in">
+          {(role === "member" || role === "officer") && (
             <Link href="/submit" className="font-medium hover:underline">
               Add entry
             </Link>
-          </Show>
+          )}
           {role === "officer" && (
             <Link href="/review" className="font-medium hover:underline">
               Review

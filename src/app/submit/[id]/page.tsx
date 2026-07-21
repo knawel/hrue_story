@@ -11,13 +11,13 @@ export default async function EditEntryPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const { userId } = await auth();
-  if (!userId) redirect("/");
+  const role = await getRole();
+  if (!role) redirect("/");
 
+  const { userId } = await auth();
   const entry = await getEntryById(id);
   if (!entry) notFound();
 
-  const role = await getRole();
   const canEdit = role === "officer" || entry.author_id === userId;
   if (!canEdit) redirect("/");
 

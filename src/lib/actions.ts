@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
+import { getEntryById } from "@/lib/get-entries";
 import { getRole } from "@/lib/get-role";
 
 function readEntryFields(formData: FormData) {
@@ -17,11 +18,13 @@ function readEntryFields(formData: FormData) {
 
 export async function submitEntryAction(formData: FormData) {
   const { userId } = await auth();
-  if (!userId) redirect("/");
+  const role = await getRole();
+  if (!userId || !role) redirect("/");
 
   console.log("[stub] submit entry — not persisted", {
     ...readEntryFields(formData),
     author_id: userId,
+    author_role: role,
   });
 
   redirect("/");
@@ -29,11 +32,16 @@ export async function submitEntryAction(formData: FormData) {
 
 export async function editEntryAction(formData: FormData) {
   const { userId } = await auth();
-  if (!userId) redirect("/");
   const role = await getRole();
+  if (!userId || !role) redirect("/");
+
+  const id = formData.get("id");
+  const entry = typeof id === "string" ? await getEntryById(id) : undefined;
+  const canEdit = !!entry && (role === "officer" || entry.author_id === userId);
+  if (!canEdit) redirect("/");
 
   console.log("[stub] edit entry — not persisted", {
-    id: formData.get("id"),
+    id,
     ...readEntryFields(formData),
     edited_by: userId,
     edited_by_role: role,
