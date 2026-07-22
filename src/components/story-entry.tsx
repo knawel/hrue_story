@@ -34,14 +34,14 @@ export function StoryEntry({
         aria-expanded={expanded}
         aria-label={expanded ? "Collapse story" : "Expand story"}
         onClick={toggle}
-        className="absolute -left-[37px] top-1.5 size-2 rounded-full bg-muted-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        className="absolute -left-[37px] top-1.5 size-2 rounded-full bg-silver focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
       />
-      <div className="rounded-lg border bg-muted/40">
+      <div className="rounded-lg border bg-transparent">
         <button
           type="button"
           aria-expanded={expanded}
           onClick={toggle}
-          className="flex w-full flex-wrap items-baseline gap-x-2 gap-y-1 px-4 py-2 text-left text-xs focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+          className="flex w-full flex-wrap items-baseline gap-x-2 gap-y-1 px-4 py-2 text-left text-xs focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
         >
           <span className="font-medium text-foreground">{entry.title}</span>
           <span className="text-muted-foreground">— {entry.author_name}</span>
@@ -63,7 +63,7 @@ export function StoryEntry({
               <div className="mt-3 text-right">
                 <Link
                   href={`/submit/${entry.id}`}
-                  className="text-xs font-medium text-primary hover:underline"
+                  className="text-xs font-medium text-muted-foreground hover:text-foreground hover:underline"
                 >
                   Edit
                 </Link>

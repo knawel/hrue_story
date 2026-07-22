@@ -27,7 +27,7 @@ export function Timeline({
   }
 
   return (
-    <ol className="relative border-l pl-6">
+    <ol className="timeline-spine relative pl-6">
       {entries.map((entry, index) => {
         const canEdit =
           !!role &&
@@ -42,10 +42,11 @@ export function Timeline({
             {isNewYear && (
               <li
                 className={cn(
-                  "relative pb-2 text-xs font-semibold tracking-wide text-muted-foreground",
+                  "relative pb-2 text-xs font-semibold tracking-wide text-gold",
                   index !== 0 && "pt-4",
                 )}
               >
+                <span className="absolute -left-[33px] top-1/2 h-px w-[18px] -translate-y-1/2 bg-gold" />
                 {year}
               </li>
             )}

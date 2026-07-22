@@ -35,9 +35,9 @@ export function MilestoneEntry({
         aria-expanded={expanded}
         aria-label={expanded ? "Collapse milestone" : "Expand milestone"}
         onClick={toggle}
-        className="absolute -left-[31px] top-1.5 size-3 rounded-full bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        className="absolute -left-[32px] top-1.5 size-3.5 rounded-full bg-gold ring-4 ring-gold/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
       />
-      <div className="rounded-lg border bg-card p-4 shadow-sm">
+      <div className="corner-brackets border bg-card p-4">
         <div className="flex items-baseline justify-between gap-4">
           <h3 className="text-lg font-semibold">{entry.title}</h3>
           <time className="shrink-0 text-xs text-muted-foreground">
@@ -59,7 +59,7 @@ export function MilestoneEntry({
             type="button"
             aria-expanded={expanded}
             onClick={toggle}
-            className="mt-1 text-xs font-medium text-primary hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            className="mt-1 text-xs font-medium text-gold hover:text-gold-bright hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           >
             {expanded ? "Show less" : "Show more"}
           </button>
@@ -72,7 +72,7 @@ export function MilestoneEntry({
           {canEdit && (
             <Link
               href={`/submit/${entry.id}`}
-              className="text-xs font-medium text-primary hover:underline"
+              className="text-xs font-medium text-muted-foreground hover:text-foreground hover:underline"
             >
               Edit
             </Link>

@@ -22,7 +22,9 @@ export default async function ReviewPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="text-2xl font-semibold">Review queue</h1>
+      <h1 className="font-heading text-2xl font-semibold text-gold">
+        Review queue
+      </h1>
       <p className="mt-2 text-muted-foreground">
         Pending milestones awaiting approval.
       </p>
@@ -66,7 +68,9 @@ export default async function ReviewPage() {
         ))}
       </div>
 
-      <h2 className="mt-12 text-xl font-semibold">Hidden entries</h2>
+      <h2 className="font-heading mt-12 text-xl font-semibold text-gold">
+        Hidden entries
+      </h2>
       <p className="mt-2 text-muted-foreground">
         Off the public timeline, still in the record.
       </p>

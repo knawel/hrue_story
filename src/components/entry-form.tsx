@@ -30,6 +30,7 @@ export function EntryForm({
               name="type"
               value="milestone"
               defaultChecked={defaultValues?.type !== "story"}
+              className="accent-gold"
             />
             Milestone
           </label>
@@ -39,6 +40,7 @@ export function EntryForm({
               name="type"
               value="story"
               defaultChecked={defaultValues?.type === "story"}
+              className="accent-gold"
             />
             Story
           </label>
@@ -87,7 +89,7 @@ export function EntryForm({
             id="date_precision"
             name="date_precision"
             defaultValue={defaultValues?.date_precision ?? "day"}
-            className="h-9 w-full rounded-md border bg-background px-3 text-sm"
+            className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-base outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
           >
             <option value="day">Day</option>
             <option value="month">Month</option>

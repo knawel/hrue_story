@@ -12,7 +12,7 @@ export default async function Home() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-16">
-      <h1 className="text-2xl font-semibold">HRUE</h1>
+      <h1 className="font-heading text-2xl font-semibold text-gold">HRUE</h1>
       <p className="mt-2 text-muted-foreground">
         Holy Russian Empire — milestones and stories from across the corp, in
         one place.

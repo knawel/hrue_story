@@ -29,7 +29,9 @@ export default async function EditEntryPage({
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
-      <h1 className="text-2xl font-semibold">Edit entry</h1>
+      <h1 className="font-heading text-2xl font-semibold text-gold">
+        Edit entry
+      </h1>
       <p className="mt-2 text-muted-foreground">
         Saving creates a new revision — the previous text is kept, never
         overwritten.
@@ -45,7 +47,7 @@ export default async function EditEntryPage({
         <div className="mt-8 border-t pt-8">
           <Link
             href={`/submit/${entry.id}/history`}
-            className="text-sm font-medium text-primary hover:underline"
+            className="text-sm font-medium text-muted-foreground hover:text-foreground hover:underline"
           >
             View revision history
           </Link>
