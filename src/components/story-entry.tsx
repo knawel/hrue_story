@@ -6,6 +6,7 @@ import { Paperclip } from "lucide-react";
 import { Entry } from "@/lib/types";
 import { formatEntryDate } from "@/lib/format-entry-date";
 import { EntryLinks } from "@/components/entry-links";
+import { EntryMarkdown } from "@/components/entry-markdown";
 
 function hasMedia(entry: Entry) {
   return !!(
@@ -56,7 +57,7 @@ export function StoryEntry({
         </button>
         {expanded && (
           <div className="border-t px-4 py-3">
-            <p className="text-xs text-muted-foreground">{entry.body}</p>
+            <EntryMarkdown body={entry.body} className="text-xs text-muted-foreground" />
             <EntryLinks entry={entry} />
             {canEdit && (
               <div className="mt-3 text-right">

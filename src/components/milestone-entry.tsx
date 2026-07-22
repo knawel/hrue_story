@@ -5,7 +5,8 @@ import Link from "next/link";
 import { Entry } from "@/lib/types";
 import { formatEntryDate } from "@/lib/format-entry-date";
 import { EntryLinks } from "@/components/entry-links";
-import { cn } from "@/lib/utils";
+import { EntryMarkdown } from "@/components/entry-markdown";
+import { stripMarkdown } from "@/lib/strip-markdown";
 
 export function MilestoneEntry({
   entry,
@@ -43,15 +44,16 @@ export function MilestoneEntry({
             {formatEntryDate(entry.event_date, entry.date_precision)}
           </time>
         </div>
-        <p
-          ref={bodyRef}
-          className={cn(
-            "mt-2 text-sm text-muted-foreground",
-            !expanded && "line-clamp-4",
-          )}
-        >
-          {entry.body}
-        </p>
+        {expanded ? (
+          <EntryMarkdown
+            body={entry.body}
+            className="mt-2 text-sm text-muted-foreground"
+          />
+        ) : (
+          <p ref={bodyRef} className="mt-2 line-clamp-4 text-sm text-muted-foreground">
+            {stripMarkdown(entry.body)}
+          </p>
+        )}
         {isClampable && (
           <button
             type="button"

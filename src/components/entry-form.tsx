@@ -64,6 +64,10 @@ export function EntryForm({
           rows={5}
           defaultValue={defaultValues?.body}
         />
+        <p className="text-xs text-muted-foreground">
+          <code>**bold**</code> <code>*italic*</code>{" "}
+          <code>[text](url)</code> <code>- list</code>
+        </p>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
