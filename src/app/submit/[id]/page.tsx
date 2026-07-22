@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
-import { Button } from "@/components/ui/button";
 import { EntryForm } from "@/components/entry-form";
+import { SubmitButton } from "@/components/submit-button";
 import {
   editEntryAction,
   hideEntryAction,
@@ -59,12 +59,12 @@ export default async function EditEntryPage({
                 ? "This entry is hidden from the public timeline."
                 : "Hiding drops this entry from the public timeline. It stays in the record and can be un-hidden."}
             </p>
-            <Button
-              type="submit"
+            <SubmitButton
               variant={entry.hidden ? "outline" : "destructive"}
+              pendingLabel={entry.hidden ? "Un-hiding…" : "Hiding…"}
             >
               {entry.hidden ? "Un-hide entry" : "Hide entry"}
-            </Button>
+            </SubmitButton>
           </form>
         </div>
       )}

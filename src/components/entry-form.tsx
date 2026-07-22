@@ -1,8 +1,10 @@
+"use client";
+
 import { Entry } from "@/lib/types";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { SubmitButton } from "@/components/submit-button";
 
 export function EntryForm({
   action,
@@ -134,7 +136,7 @@ export function EntryForm({
         />
       </div>
 
-      <Button type="submit">{submitLabel}</Button>
+      <SubmitButton>{submitLabel}</SubmitButton>
     </form>
   );
 }

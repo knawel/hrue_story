@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { SubmitButton } from "@/components/submit-button";
 import { formatEntryDate } from "@/lib/format-entry-date";
 import { getHiddenEntries, getPendingMilestones } from "@/lib/get-entries";
 import { getRole } from "@/lib/get-role";
@@ -45,15 +46,15 @@ export default async function ReviewPage() {
             <div className="mt-4 flex gap-2">
               <form action={approveEntryAction}>
                 <input type="hidden" name="id" value={entry.id} />
-                <Button type="submit" size="sm">
+                <SubmitButton size="sm" pendingLabel="Approving…">
                   Approve
-                </Button>
+                </SubmitButton>
               </form>
               <form action={rejectEntryAction}>
                 <input type="hidden" name="id" value={entry.id} />
-                <Button type="submit" size="sm" variant="outline">
+                <SubmitButton size="sm" variant="outline" pendingLabel="Rejecting…">
                   Reject
-                </Button>
+                </SubmitButton>
               </form>
               <Button
                 size="sm"
@@ -89,9 +90,9 @@ export default async function ReviewPage() {
             <div className="mt-4 flex gap-2">
               <form action={unhideEntryAction}>
                 <input type="hidden" name="id" value={entry.id} />
-                <Button type="submit" size="sm">
+                <SubmitButton size="sm" pendingLabel="Un-hiding…">
                   Un-hide
-                </Button>
+                </SubmitButton>
               </form>
               <Button
                 size="sm"
