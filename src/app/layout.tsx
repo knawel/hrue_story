@@ -20,7 +20,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "HRUE — Holy Russian Empire",
+  title: "HRUE — Летопись корпорации",
   description: "A crowd-sourced history timeline of the HRUE corporation.",
 };
 

@@ -42,7 +42,7 @@ export function Timeline({
             {isNewYear && (
               <li
                 className={cn(
-                  "relative pb-2 text-xs font-semibold tracking-wide text-gold",
+                  "relative pb-2 text-sm font-semibold tracking-wide text-gold",
                   index !== 0 && "pt-4",
                 )}
               >

@@ -32,19 +32,19 @@ export default async function EntryHistoryPage({
               <h2 className="font-semibold">
                 {revision.title}
                 {index === 0 && (
-                  <span className="ml-2 text-xs font-normal text-muted-foreground">
+                  <span className="ml-2 text-sm font-normal text-muted-foreground">
                     (current)
                   </span>
                 )}
               </h2>
-              <time className="shrink-0 text-xs text-muted-foreground">
+              <time className="shrink-0 text-sm text-muted-foreground">
                 {formatEntryDate(revision.eventDate, revision.datePrecision)}
               </time>
             </div>
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="mt-2 text-base text-muted-foreground">
               {revision.body}
             </p>
-            <p className="mt-2 text-xs text-muted-foreground">
+            <p className="mt-2 text-sm text-muted-foreground">
               — {revision.authorName} ·{" "}
               {new Date(revision.createdAt).toLocaleString("en-US", {
                 dateStyle: "medium",

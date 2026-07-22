@@ -66,7 +66,7 @@ export function EntryForm({
           rows={5}
           defaultValue={defaultValues?.body}
         />
-        <p className="text-xs text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           <code>**bold**</code> <code>*italic*</code>{" "}
           <code>[text](url)</code> <code>- list</code>
         </p>

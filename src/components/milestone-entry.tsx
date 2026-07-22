@@ -39,20 +39,20 @@ export function MilestoneEntry({
       />
       <div className="corner-brackets border bg-card p-4">
         <div className="flex items-baseline justify-between gap-4">
-          <h3 className="text-lg font-semibold">{entry.title}</h3>
-          <time className="shrink-0 text-xs text-muted-foreground">
+          <h3 className="text-xl font-semibold">{entry.title}</h3>
+          <time className="shrink-0 text-sm text-muted-foreground">
             {formatEntryDate(entry.event_date, entry.date_precision)}
           </time>
         </div>
         {expanded ? (
           <EntryMarkdown
             body={entry.body}
-            className="mt-2 text-sm text-muted-foreground"
+            className="mt-2 text-base text-muted-foreground"
           />
         ) : (
           <p
             ref={bodyRef}
-            className="mt-2 line-clamp-4 whitespace-pre-line text-sm text-muted-foreground"
+            className="mt-2 line-clamp-4 whitespace-pre-line text-base text-muted-foreground"
           >
             {stripMarkdown(entry.body)}
           </p>
@@ -62,20 +62,20 @@ export function MilestoneEntry({
             type="button"
             aria-expanded={expanded}
             onClick={toggle}
-            className="mt-1 text-xs font-medium text-gold hover:text-gold-bright hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+            className="mt-1 text-sm font-medium text-gold hover:text-gold-bright hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
           >
             {expanded ? "Show less" : "Show more"}
           </button>
         )}
         <EntryLinks entry={entry} />
         <div className="mt-3 flex items-baseline justify-between gap-4">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-sm text-muted-foreground">
             — {entry.author_name}
           </p>
           {canEdit && (
             <Link
               href={`/submit/${entry.id}`}
-              className="text-xs font-medium text-muted-foreground hover:text-foreground hover:underline"
+              className="text-sm font-medium text-muted-foreground hover:text-foreground hover:underline"
             >
               Edit
             </Link>

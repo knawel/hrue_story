@@ -37,12 +37,12 @@ export default async function ReviewPage() {
           <div key={entry.id} className="rounded-lg border p-4">
             <div className="flex items-baseline justify-between gap-4">
               <h2 className="font-semibold">{entry.title}</h2>
-              <time className="shrink-0 text-xs text-muted-foreground">
+              <time className="shrink-0 text-sm text-muted-foreground">
                 {formatEntryDate(entry.event_date, entry.date_precision)}
               </time>
             </div>
-            <p className="mt-2 text-sm text-muted-foreground">{entry.body}</p>
-            <p className="mt-2 text-xs text-muted-foreground">
+            <p className="mt-2 text-base text-muted-foreground">{entry.body}</p>
+            <p className="mt-2 text-sm text-muted-foreground">
               — {entry.author_name}
             </p>
             <div className="mt-4 flex gap-2">
@@ -83,12 +83,12 @@ export default async function ReviewPage() {
           <div key={entry.id} className="rounded-lg border p-4">
             <div className="flex items-baseline justify-between gap-4">
               <h3 className="font-semibold">{entry.title}</h3>
-              <time className="shrink-0 text-xs text-muted-foreground">
+              <time className="shrink-0 text-sm text-muted-foreground">
                 {formatEntryDate(entry.event_date, entry.date_precision)}
               </time>
             </div>
-            <p className="mt-2 text-sm text-muted-foreground">{entry.body}</p>
-            <p className="mt-2 text-xs text-muted-foreground">
+            <p className="mt-2 text-base text-muted-foreground">{entry.body}</p>
+            <p className="mt-2 text-sm text-muted-foreground">
               — {entry.author_name}
             </p>
             <div className="mt-4 flex gap-2">
