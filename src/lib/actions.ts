@@ -4,14 +4,13 @@ import { redirect } from "next/navigation";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { getDb } from "@/lib/db/client";
-import { entries, NewEntryRow } from "@/lib/db/schema";
+import { entries, entryRevisions, NewEntryRevisionRow } from "@/lib/db/schema";
 import { getEntryById } from "@/lib/get-entries";
 import { getRole } from "@/lib/get-role";
 import { DatePrecision, EntryType } from "@/lib/types";
 
-function readEntryFields(formData: FormData) {
+function readRevisionFields(formData: FormData) {
   return {
-    type: formData.get("type") as EntryType,
     title: String(formData.get("title") ?? ""),
     body: String(formData.get("body") ?? ""),
     eventDate: String(formData.get("event_date") ?? ""),
@@ -20,7 +19,7 @@ function readEntryFields(formData: FormData) {
     youtubeUrl: (formData.get("youtube_url") as string) || null,
     killboardUrl: (formData.get("killboard_url") as string) || null,
     otherUrl: (formData.get("other_url") as string) || null,
-  } satisfies Partial<NewEntryRow>;
+  } satisfies Partial<NewEntryRevisionRow>;
 }
 
 async function authorName() {
@@ -34,8 +33,9 @@ async function authorName() {
 }
 
 async function assertCanEdit(id: string, userId: string, role: string) {
+  if (role === "officer") return true;
   const entry = await getEntryById(id);
-  return !!entry && (role === "officer" || entry.author_id === userId);
+  return !!entry && entry.owner_id === userId;
 }
 
 export async function submitEntryAction(formData: FormData) {
@@ -43,15 +43,22 @@ export async function submitEntryAction(formData: FormData) {
   const role = await getRole();
   if (!userId || !role) redirect("/");
 
-  const fields = readEntryFields(formData);
+  const type = formData.get("type") as EntryType;
+  const fields = readRevisionFields(formData);
+  const name = await authorName();
+
+  const [entry] = await getDb()
+    .insert(entries)
+    .values({ type, status: type === "story" ? "approved" : "pending" })
+    .returning({ id: entries.id });
 
   await getDb()
-    .insert(entries)
+    .insert(entryRevisions)
     .values({
       ...fields,
+      entryId: entry.id,
       authorId: userId,
-      authorName: await authorName(),
-      status: fields.type === "story" ? "approved" : "pending",
+      authorName: name,
     });
 
   redirect("/");
@@ -67,29 +74,40 @@ export async function editEntryAction(formData: FormData) {
     redirect("/");
   }
 
-  const fields = readEntryFields(formData);
+  const fields = readRevisionFields(formData);
 
   await getDb()
-    .update(entries)
-    .set({ ...fields, updatedAt: new Date().toISOString() })
-    .where(eq(entries.id, id as string));
+    .insert(entryRevisions)
+    .values({
+      ...fields,
+      entryId: id as string,
+      authorId: userId,
+      authorName: await authorName(),
+    });
 
   redirect("/");
 }
 
-export async function deleteEntryAction(formData: FormData) {
-  const { userId } = await auth();
+export async function hideEntryAction(formData: FormData) {
   const role = await getRole();
-  if (!userId || !role) redirect("/");
+  if (role !== "officer") redirect("/");
 
   const id = formData.get("id");
-  if (typeof id !== "string" || !(await assertCanEdit(id, userId, role))) {
-    redirect("/");
+  if (typeof id === "string") {
+    await getDb().update(entries).set({ hidden: true }).where(eq(entries.id, id));
   }
 
-  await getDb()
-    .delete(entries)
-    .where(eq(entries.id, id as string));
+  redirect("/");
+}
+
+export async function unhideEntryAction(formData: FormData) {
+  const role = await getRole();
+  if (role !== "officer") redirect("/");
+
+  const id = formData.get("id");
+  if (typeof id === "string") {
+    await getDb().update(entries).set({ hidden: false }).where(eq(entries.id, id));
+  }
 
   redirect("/");
 }
@@ -102,7 +120,7 @@ export async function approveEntryAction(formData: FormData) {
   if (typeof id === "string") {
     await getDb()
       .update(entries)
-      .set({ status: "approved", updatedAt: new Date().toISOString() })
+      .set({ status: "approved" })
       .where(eq(entries.id, id));
   }
 
@@ -117,7 +135,7 @@ export async function rejectEntryAction(formData: FormData) {
   if (typeof id === "string") {
     await getDb()
       .update(entries)
-      .set({ status: "rejected", updatedAt: new Date().toISOString() })
+      .set({ status: "rejected" })
       .where(eq(entries.id, id));
   }
 

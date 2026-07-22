@@ -1,8 +1,13 @@
+import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import { Button } from "@/components/ui/button";
 import { EntryForm } from "@/components/entry-form";
-import { deleteEntryAction, editEntryAction } from "@/lib/actions";
+import {
+  editEntryAction,
+  hideEntryAction,
+  unhideEntryAction,
+} from "@/lib/actions";
 import { getEntryById } from "@/lib/get-entries";
 import { getRole } from "@/lib/get-role";
 
@@ -19,12 +24,16 @@ export default async function EditEntryPage({
   const entry = await getEntryById(id);
   if (!entry) notFound();
 
-  const canEdit = role === "officer" || entry.author_id === userId;
+  const canEdit = role === "officer" || entry.owner_id === userId;
   if (!canEdit) redirect("/");
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
       <h1 className="text-2xl font-semibold">Edit entry</h1>
+      <p className="mt-2 text-muted-foreground">
+        Saving creates a new revision — the previous text is kept, never
+        overwritten.
+      </p>
       <div className="mt-8">
         <EntryForm
           action={editEntryAction}
@@ -32,12 +41,33 @@ export default async function EditEntryPage({
           submitLabel="Save changes"
         />
       </div>
-      <form action={deleteEntryAction} className="mt-8 border-t pt-8">
-        <input type="hidden" name="id" value={entry.id} />
-        <Button type="submit" variant="destructive">
-          Delete entry
-        </Button>
-      </form>
+      {role === "officer" && (
+        <div className="mt-8 border-t pt-8">
+          <Link
+            href={`/submit/${entry.id}/history`}
+            className="text-sm font-medium text-primary hover:underline"
+          >
+            View revision history
+          </Link>
+          <form
+            action={entry.hidden ? unhideEntryAction : hideEntryAction}
+            className="mt-6"
+          >
+            <input type="hidden" name="id" value={entry.id} />
+            <p className="mb-3 text-sm text-muted-foreground">
+              {entry.hidden
+                ? "This entry is hidden from the public timeline."
+                : "Hiding drops this entry from the public timeline. It stays in the record and can be un-hidden."}
+            </p>
+            <Button
+              type="submit"
+              variant={entry.hidden ? "outline" : "destructive"}
+            >
+              {entry.hidden ? "Un-hide entry" : "Hide entry"}
+            </Button>
+          </form>
+        </div>
+      )}
     </div>
   );
 }

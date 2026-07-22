@@ -15,7 +15,9 @@ export type Entry = {
   other_url?: string;
   author_id: string;
   author_name: string;
+  owner_id: string;
   status: EntryStatus;
+  hidden: boolean;
   created_at: string;
   updated_at: string;
 };

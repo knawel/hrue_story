@@ -3,9 +3,26 @@ import { config } from "dotenv";
 config({ path: ".env.local" });
 
 import { getDb } from "../src/lib/db/client";
-import { entries, NewEntryRow } from "../src/lib/db/schema";
+import { entries, entryRevisions } from "../src/lib/db/schema";
+import { DatePrecision, EntryStatus, EntryType } from "../src/lib/types";
 
-const seedRows: NewEntryRow[] = [
+type SeedRow = {
+  type: EntryType;
+  title: string;
+  body: string;
+  eventDate: string;
+  datePrecision: DatePrecision;
+  imageUrl?: string;
+  youtubeUrl?: string;
+  killboardUrl?: string;
+  otherUrl?: string;
+  authorId: string;
+  authorName: string;
+  status: EntryStatus;
+  createdAt: string;
+};
+
+const seedRows: SeedRow[] = [
   {
     type: "milestone",
     title: "Основание корпорации",
@@ -16,7 +33,6 @@ const seedRows: NewEntryRow[] = [
     authorName: "Ария Восс",
     status: "approved",
     createdAt: "2019-01-01T00:00:00.000Z",
-    updatedAt: "2019-01-01T00:00:00.000Z",
   },
   {
     type: "story",
@@ -28,7 +44,6 @@ const seedRows: NewEntryRow[] = [
     authorName: "Денис Оконкво",
     status: "approved",
     createdAt: "2019-06-01T00:00:00.000Z",
-    updatedAt: "2019-06-01T00:00:00.000Z",
   },
   {
     type: "milestone",
@@ -40,7 +55,6 @@ const seedRows: NewEntryRow[] = [
     authorName: "Ария Восс",
     status: "approved",
     createdAt: "2020-03-01T00:00:00.000Z",
-    updatedAt: "2020-03-01T00:00:00.000Z",
   },
   {
     type: "story",
@@ -53,7 +67,6 @@ const seedRows: NewEntryRow[] = [
     authorName: "Тома Рейес",
     status: "approved",
     createdAt: "2020-11-14T00:00:00.000Z",
-    updatedAt: "2020-11-14T00:00:00.000Z",
   },
   {
     type: "milestone",
@@ -66,7 +79,6 @@ const seedRows: NewEntryRow[] = [
     authorName: "Прия Накамура",
     status: "approved",
     createdAt: "2022-08-01T00:00:00.000Z",
-    updatedAt: "2022-08-01T00:00:00.000Z",
   },
   {
     type: "milestone",
@@ -78,13 +90,38 @@ const seedRows: NewEntryRow[] = [
     authorName: "Ария Восс",
     status: "pending",
     createdAt: "2026-06-02T00:00:00.000Z",
-    updatedAt: "2026-06-02T00:00:00.000Z",
   },
 ];
 
 async function main() {
   const db = getDb();
-  await db.insert(entries).values(seedRows);
+
+  for (const row of seedRows) {
+    const [entry] = await db
+      .insert(entries)
+      .values({
+        type: row.type,
+        status: row.status,
+        createdAt: row.createdAt,
+      })
+      .returning({ id: entries.id });
+
+    await db.insert(entryRevisions).values({
+      entryId: entry.id,
+      title: row.title,
+      body: row.body,
+      eventDate: row.eventDate,
+      datePrecision: row.datePrecision,
+      imageUrl: row.imageUrl ?? null,
+      youtubeUrl: row.youtubeUrl ?? null,
+      killboardUrl: row.killboardUrl ?? null,
+      otherUrl: row.otherUrl ?? null,
+      authorId: row.authorId,
+      authorName: row.authorName,
+      createdAt: row.createdAt,
+    });
+  }
+
   console.log(`Seeded ${seedRows.length} entries.`);
 }
 

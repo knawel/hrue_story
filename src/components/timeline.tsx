@@ -27,7 +27,7 @@ export function Timeline({
         const canEdit =
           !!role &&
           (role === "officer" ||
-            (!!currentUserId && entry.author_id === currentUserId));
+            (!!currentUserId && entry.owner_id === currentUserId));
 
         return (
           <li
