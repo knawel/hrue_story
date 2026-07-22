@@ -1,187 +1,169 @@
-# Corp History Timeline — Spec
+# Corp History Timeline — Vision
 
-> North-star document. The "what and why." Keep it stable; let implementation
-> details live in code. If a decision here changes, update this file first,
-> then the code.
-
-## 0. Guiding principle — start simple
-
-Build the smallest thing that works, then add complexity only when a real need
-appears. Prefer one moving part over two. The build is split into two steps
-(see §8) so there is always something working and deployed. Everything in §10
-is deliberately deferred.
+> This is the durable "why and what." It should stay true even as the site is
+> rebuilt or re-styled. Implementation details — the schema, the framework, the
+> hosting, the exact fields — live in the code and the README and are expected
+> to change; nothing in this document should depend on them. If a *principle*
+> here changes, update this file first, then the code.
 
 ## 1. Purpose
 
-A web app that preserves an EVE Online corporation's history as a single,
-visible, shareable timeline. History is crowd-sourced from many members because
-no one person holds the whole story.
+Preserve an EVE Online corporation's history as a single, shared, lasting
+timeline — the battles, the moves between systems, the turning points, and the
+personal stories that surround them.
 
-Two kinds of content share one timeline:
+The history is crowd-sourced, because no one person holds all of it. The app
+exists to gather those fragments from many members into one place that is
+curated, correctly attributed, and genuinely nice to read — the three things a
+shared document could never do well.
 
-- **Milestones** — canonical corp history (major battles, system defense,
-  wormhole moves, alliance changes). Officer-approved. The authoritative backbone.
-- **Stories** — short personal accounts from members, loosely attached to a
-  point in time. Color around the milestones.
+## 2. What lives on the timeline
 
-Solves the three things a shared doc could not: no random edits, clear
-authorship, and a presentation people actually want to look at.
+Two kinds of content, side by side on one timeline, deliberately distinct:
 
-## 2. Access model
+- **Milestones** — the corporation's canonical history: major battles, system
+  defenses, wormhole moves, alliance changes. These are the authoritative
+  backbone, and they are curated before they become official.
+- **Stories** — short, personal accounts from members, loosely pinned in time.
+  These are the color and texture around the milestones, and they are trusted
+  on submission rather than gate-kept.
 
-- **Viewing is public.** Anyone, logged in or not, can read the timeline.
-- **Editing requires an assigned role, not just login.** Discord sign-in alone
-  grants no write access — an officer must manually set
-  `publicMetadata.role = "member"` (or `"officer"`) in the Clerk dashboard
-  before a user can add or edit anything. This is deliberate: it stops any
-  random Discord login from getting write access by default.
+Both can carry supporting material — a video, a battle report or killmail link,
+an image, a reference — but the account itself is the point; media is optional
+enrichment, never a requirement.
 
-| Role    | Who                                          | Can do |
-|---------|-----------------------------------------------|--------|
-| Visitor | Not logged in, or logged in with no role set | Read approved content only |
-| Member  | Logged in + `role: "member"` in Clerk        | Add stories, propose milestones, edit/delete own entries |
-| Officer | Logged in + `role: "officer"` in Clerk       | All member actions + approve/reject milestones + edit/delete any entry |
+## 3. Principles
 
-Roles live in Clerk `publicMetadata.role = "member" | "officer"`. Both roles
-are assigned by hand in the Clerk dashboard for v1 — there's no self-serve
-path into either one.
+These are the rules that define the product. They should outlast any particular
+implementation.
 
-## 3. Core concepts
+**Open to read, curated to contribute.** Anyone can view the history — it's
+something the corp is proud to show. Contributing is a privilege, not a default:
+being able to log in is *not* the same as being allowed to write. Write access
+is granted deliberately to known members, so no random visitor — even an
+authenticated one — can alter the record.
 
-### Entry types
-Milestones and stories are one underlying record, distinguished by a `type`
-field. Same timeline; they differ in styling and in the approval rule.
+**Two tiers of trust.** Ordinary contributors can add their own stories and
+propose milestones. A smaller group of curators (officers) decides what becomes
+canonical history and can correct any entry or hide it from the timeline. This
+mirrors how the corp actually works and keeps the official history trustworthy.
+Crucially, "correct" and "hide" never mean *destroy* — see the append-only
+principle below.
 
-### Dating
-Every entry is anchored in time, but precision varies — members may only recall
-the year.
-- `event_date`: a real date.
-- `date_precision`: `"day" | "month" | "year"`.
-- Year-only? Store `YYYY-01-01` with precision `"year"`; UI renders just the year.
-- Sort chronologically by `event_date`; ties broken by `created_at`.
+**Milestones are vetted; stories are trusted.** A member's personal story
+appears immediately — the fact that only known members can write is the
+safeguard. A milestone claims to be *official history*, so it stays a proposal
+until a curator approves it. This is the single most important distinction in
+the product.
 
-### Approval rule (the one that matters)
-- **Stories** are trusted on submission: a logged-in member's story publishes
-  immediately (`status = "approved"`). Login-gating is the moderation.
-- **Milestones** are canon and must be vetted: created as `status = "pending"`,
-  appear publicly only after an officer approves.
-- Officers can edit/remove any entry; members only their own.
+**Everything is anchored in time — at whatever precision is known.** Some events
+are remembered to the day, others only to the year. The timeline honors that:
+it never invents precision the contributor didn't have, and it orders the
+history as faithfully as the available dates allow.
 
-## 4. Features (v1 scope)
+**Every entry is attributed, permanently.** History without authorship is just
+rumor. Each entry is credited to the member who wrote it, and that credit stays
+stable even if their name or handle later changes.
 
-- **Timeline (`/`)** — public. All `approved` entries, chronological, milestones
-  and stories visually distinct. The front door.
-- **Add entry** — auth-required (modal or `/submit`). Fields: type, title, body,
-  date + precision, optional image URL, optional YouTube link, optional
-  zKillboard battle report / killmail link, optional other link. Author =
-  logged-in Clerk user.
-- **Review queue (`/review`)** — officer-only. Lists `pending` milestones with
-  approve / reject.
-- **Edit entry** — author or officer. Same form as add.
-- **Auth** — Clerk sign-in with Discord; visible user button when logged in.
+**The record is append-only — nothing is destroyed, only superseded or hidden.**
+This is what makes the history trustworthy over time. An entry is never
+overwritten and never deleted: every edit is saved as a *new revision*, and the
+timeline simply shows the latest visible one. The full chain of revisions is
+preserved and viewable by curators, so it is always clear how an entry changed
+and who changed it. "Removing" an entry means marking it *hidden* (it drops off
+the public timeline but remains in the record and can be un-hidden), not erasing
+it. The strongest thing anyone can do to the past is add a superseding revision;
+no one can rewrite or delete what was already there. This guarantee holds even
+against a curator acting in bad faith: the worst they can do is add another
+revision or hide something, both of which are visible and reversible to other
+curators.
 
-Behaviors:
-- Public timeline never shows `pending` or `rejected`.
-- Every entry shows author name and date (rendered at stored precision).
-- `author_name` captured at creation so attribution stays stable if a Discord
-  display name later changes.
+**Every change is itself a recorded event.** Edits, hides, and un-hides are each
+logged with who did them and when. Accountability is not a feature bolted on —
+it falls out naturally from an append-only record.
 
-## 5. Permissions matrix
+## 4. Experience goals
 
-| Action                      | Visitor | Member | Officer |
-|-----------------------------|:---:|:---:|:---:|
-| View approved entries       | ✅ | ✅ | ✅ |
-| Add story (auto-approved)   | ❌ | ✅ | ✅ |
-| Propose milestone (pending) | ❌ | ✅ | ✅ |
-| Edit/delete own entry       | ❌ | ✅ | ✅ |
-| Edit/delete any entry       | ❌ | ❌ | ✅ |
-| Approve/reject milestone    | ❌ | ❌ | ✅ |
+- The distinction between official history and personal story should be obvious
+  at a glance, before reading a word.
+- The site should look intentional and inviting — especially to a logged-out
+  visitor or a prospective recruit, who sees it first.
+- It should be effortless for a nervous new member to add their story; the path
+  from "I have something to add" to a saved entry is short and unintimidating.
+- Legibility over cleverness. This is something people read, sometimes at
+  length; clarity and calm win over interactivity for its own sake.
+- It should read well on a phone, since most people will open it from a chat
+  link.
 
-"Visitor" here includes anyone logged in via Discord who hasn't been assigned
-a role yet — login alone doesn't promote you to Member.
+## 5. What this is not (scope boundaries)
 
-Permission checks are enforced **server-side** (server actions / route
-handlers), never only in the UI.
+Deliberately excluded, to keep the project focused and durable:
 
-## 6. Data model
+- Not an in-game-identity system. Trust comes from known members and curators,
+  not from verifying EVE characters.
+- Not a discussion platform. No comments, threads, or reactions — it's an
+  archive, not a forum.
+- Not a media host. Entries reference media by link; the app doesn't store or
+  manage large files.
+- Not a multi-organization product. It serves one corporation's history.
+- Not self-serve for privileges. Contributor and curator status is granted by
+  people, not claimed.
 
-One primary table, `entries` (Postgres / Neon):
+## 6. Directions it might grow
 
-| Column           | Type        | Notes |
-|------------------|-------------|-------|
-| `id`             | uuid/serial | Primary key |
-| `type`           | text/enum   | `"milestone" \| "story"` |
-| `title`          | text        | Required |
-| `body`           | text        | Plain text or light markdown |
-| `event_date`     | date        | Anchor point |
-| `date_precision` | text/enum   | `"day" \| "month" \| "year"` |
-| `image_url`      | text        | Optional |
-| `youtube_url`     | text        | Optional — linked video |
-| `killboard_url`   | text        | Optional — zKillboard battle report / killmail |
-| `other_url`       | text        | Optional — any other reference link |
-| `author_id`      | text        | Clerk user id |
-| `author_name`    | text        | Denormalized display name at creation |
-| `status`         | text/enum   | `"pending" \| "approved" \| "rejected"` |
-| `created_at`     | timestamp   | |
-| `updated_at`     | timestamp   | |
+Possible later, none committed, all subordinate to the principles above:
+search and filtering; tags or categories (battles vs. moves vs. lore);
+grouping the timeline into per-era "chapters"; richer media handling; a
+printable or exportable history; broadening how identity and roles are managed.
 
-Roles are not a table in v1 — they live in Clerk metadata. A local `members`
-table can be added later if needed.
+One capability is deliberately **deferred until a real need forces its shape**,
+rather than guessed at now:
 
-## 7. Tech stack
+- **True deletion / redaction** — for the rare case of content that must
+  actually leave the public record (something harmful, doxxing, a legal ask).
+  When that need appears it will come with a concrete requirement that dictates
+  the right behavior; building it in the abstract now would almost certainly
+  guess wrong. The one commitment made in advance: the record's storage must
+  never let normal operation physically destroy a revision, so that a careful,
+  role-restricted redaction can be *added* later without a rewrite.
 
-- **Framework:** Next.js (App Router), TypeScript.
-- **Auth:** Clerk, Discord social connection. Public read; login required to
-  edit. Role in `publicMetadata`.
-- **Database:** **Neon** (serverless Postgres), accessed via **Drizzle ORM**
-  (`@neondatabase/serverless` driver). Drizzle earns its place by giving typed
-  queries and simple migrations as the schema evolves.
-- **Styling / UI:** Tailwind CSS + shadcn/ui.
-- **Timeline rendering:** a small custom vertical-timeline component (central
-  spine; milestones centered/emphasized, stories as side cards). Kept thin and
-  **decoupled** — entries come from our own data layer in our own shape, so the
-  render layer is swappable. Drop-in alternatives: `react-chrono` or
-  MUI `<Timeline>`.
-- **Hosting:** **Vercel** (git push to deploy). Uses the **default Vercel
-  domain** (`your-project.vercel.app`); a custom domain can be added later in
-  Vercel's settings if wanted.
+---
 
-## 8. Build plan — two steps
+## Appendix — Current implementation snapshot (mutable)
 
-The point of the split: get a real, deployed, good-looking site up **before**
-introducing a database, so the DB is the only new variable in step 2.
+> This section is the one part expected to go stale. It records how the vision
+> is *currently* realized, for orientation only. Treat the code and README as
+> the real source of truth for anything here.
 
-### Step 1 — Web only, dummy data
-- Full UI: public timeline, header with Clerk sign-in/user button, add/edit
-  form, officer review page.
-- **No database.** Entries come from a hardcoded placeholder array in the code
-  (`lib/placeholder-data.ts`), a handful of example milestones and stories.
-- Clerk login works; role-gated UI is visible (edit/approve controls appear only
-  for logged-in / officer users).
-- Write actions are stubbed (no-ops or ephemeral) since there's nothing to
-  persist to yet — the goal is look, feel, auth, and deploy.
-- **Deployed to Vercel on the default `*.vercel.app` domain.** End state: a live
-  site the corp can see, with placeholder history.
+- Web app built with Next.js (App Router) and TypeScript, styled with Tailwind
+  and shadcn/ui.
+- Authentication via Clerk, using Discord sign-in. Roles are held in Clerk user
+  metadata and assigned by hand; login alone grants no write access.
+- Data stored in Neon (serverless Postgres), accessed through Drizzle ORM.
+- A single custom, intentionally thin timeline component renders entries, so the
+  presentation layer can be swapped without touching the data.
+- Hosted on Vercel.
 
-### Step 2 — Add Neon database
-- Add Drizzle + Neon and the `entries` schema; migrate; seed with the same
-  placeholder entries so the timeline looks identical after the switch.
-- Replace the placeholder array with real DB queries.
-- Implement real persistence: add/edit/delete and the officer approve/reject
-  flow, all enforced server-side per §5.
-- End state: fully functional app, same UI, now backed by a real database.
+Append-only data shape (current sketch, expected to evolve):
 
-## 9. Out of scope for v1 (explicit non-goals)
+- An **entry** is the stable identity of a milestone or story. It carries only
+  what doesn't change per edit — its id, its type (`milestone` / `story`), and a
+  `hidden` flag. It holds no editable content directly.
+- An **entry revision** is one immutable version of that entry's content —
+  title, body, event date + precision, links/media, plus who authored this
+  revision and when. Editing creates a new revision row; existing rows are never
+  updated or deleted.
+- The timeline shows, for each non-hidden entry, its **latest** revision.
+  Curators can view the full ordered list of revisions for any entry.
+- `hidden` is a reversible flag on the entry, not a deletion. A hidden entry
+  leaves the public timeline but stays fully in the record.
+- Approval state (`pending` / `approved` / `rejected`) applies to the entry and
+  follows the vetting rule: stories approved on submit, milestones pending until
+  a curator approves.
+- Changes worth auditing — edits (new revisions), hides, un-hides, approvals —
+  are recorded as events with actor and timestamp. In the simplest form the
+  revision rows and the `hidden`/approval transitions already carry most of this;
+  a dedicated action-log table can be added if a fuller audit trail is wanted.
 
-- EVE SSO / in-game identity verification (Discord attribution is enough).
-- Image/file uploads (accept an image URL only).
-- Comments, reactions, discussion threads.
-- Search, tags, filtering.
-- Multiple corps / tenancy.
-- Self-serve role-management UI (officers set by hand in Clerk).
-
-## 10. Future ideas (not now)
-
-Search/filtering; tags for battles vs. moves vs. lore; real image uploads;
-reactions; per-year "chapters"; printable history export; optional EVE SSO
-alongside Discord.
+Invariant to preserve no matter how this evolves: **normal application operation
+never physically deletes a revision.** Everything above depends on that.
