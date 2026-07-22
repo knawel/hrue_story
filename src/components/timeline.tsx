@@ -1,10 +1,13 @@
-import Link from "next/link";
+import { Fragment } from "react";
 import { Entry } from "@/lib/types";
 import { Role } from "@/lib/get-role";
-import { formatEntryDate } from "@/lib/format-entry-date";
-import { EntryLinks } from "@/components/entry-links";
 import { MilestoneEntry } from "@/components/milestone-entry";
+import { StoryEntry } from "@/components/story-entry";
 import { cn } from "@/lib/utils";
+
+function yearOf(entry: Entry) {
+  return entry.event_date.slice(0, 4);
+}
 
 export function Timeline({
   entries,
@@ -25,53 +28,40 @@ export function Timeline({
 
   return (
     <ol className="relative border-l pl-6">
-      {entries.map((entry) => {
+      {entries.map((entry, index) => {
         const canEdit =
           !!role &&
           (role === "officer" ||
             (!!currentUserId && entry.owner_id === currentUserId));
 
+        const year = yearOf(entry);
+        const isNewYear = index === 0 || yearOf(entries[index - 1]) !== year;
+
         return (
-          <li
-            key={entry.id}
-            className={cn(
-              "relative pb-8 last:pb-0",
-              entry.type === "story" && "ml-6",
+          <Fragment key={entry.id}>
+            {isNewYear && (
+              <li
+                className={cn(
+                  "relative pb-2 text-xs font-semibold tracking-wide text-muted-foreground",
+                  index !== 0 && "pt-4",
+                )}
+              >
+                {year}
+              </li>
             )}
-          >
-            {entry.type === "milestone" ? (
-              <MilestoneEntry entry={entry} canEdit={canEdit} />
-            ) : (
-              <>
-                <span className="absolute -left-[37px] top-1.5 size-2 rounded-full bg-muted-foreground" />
-                <div className="rounded-lg border bg-muted/40 p-4">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <h3 className="text-sm font-medium">{entry.title}</h3>
-                    <time className="shrink-0 text-xs text-muted-foreground">
-                      {formatEntryDate(entry.event_date, entry.date_precision)}
-                    </time>
-                  </div>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    {entry.body}
-                  </p>
-                  <EntryLinks entry={entry} />
-                  <div className="mt-3 flex items-baseline justify-between gap-4">
-                    <p className="text-xs text-muted-foreground">
-                      — {entry.author_name}
-                    </p>
-                    {canEdit && (
-                      <Link
-                        href={`/submit/${entry.id}`}
-                        className="text-xs font-medium text-primary hover:underline"
-                      >
-                        Edit
-                      </Link>
-                    )}
-                  </div>
-                </div>
-              </>
-            )}
-          </li>
+            <li
+              className={cn(
+                "relative pb-8 last:pb-0",
+                entry.type === "story" && "ml-6",
+              )}
+            >
+              {entry.type === "milestone" ? (
+                <MilestoneEntry entry={entry} canEdit={canEdit} />
+              ) : (
+                <StoryEntry entry={entry} canEdit={canEdit} />
+              )}
+            </li>
+          </Fragment>
         );
       })}
     </ol>
