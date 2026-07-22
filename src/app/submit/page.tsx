@@ -9,7 +9,7 @@ export default async function SubmitPage() {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
-      <h1 className="font-heading text-2xl font-semibold text-gold">
+      <h1 className="font-heading text-2xl font-semibold text-brand">
         Add an entry
       </h1>
       <p className="mt-2 text-muted-foreground">

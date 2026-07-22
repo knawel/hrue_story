@@ -20,7 +20,7 @@ export default async function EntryHistoryPage({
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
-      <h1 className="font-heading text-2xl font-semibold text-gold">
+      <h1 className="font-heading text-2xl font-semibold text-brand">
         Revision history
       </h1>
       <p className="mt-2 text-muted-foreground">{entry.title}</p>

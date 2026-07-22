@@ -22,7 +22,7 @@ export default async function ReviewPage() {
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-12">
-      <h1 className="font-heading text-2xl font-semibold text-gold">
+      <h1 className="font-heading text-2xl font-semibold text-brand">
         Review queue
       </h1>
       <p className="mt-2 text-muted-foreground">
@@ -68,7 +68,7 @@ export default async function ReviewPage() {
         ))}
       </div>
 
-      <h2 className="font-heading mt-12 text-xl font-semibold text-gold">
+      <h2 className="font-heading mt-12 text-xl font-semibold text-brand">
         Hidden entries
       </h2>
       <p className="mt-2 text-muted-foreground">

@@ -11,7 +11,7 @@ export async function SiteHeader() {
       <div className="mx-auto flex h-14 max-w-3xl items-center justify-between px-4">
         <Link
           href="/"
-          className="flex items-center gap-2 font-heading font-semibold text-gold"
+          className="flex items-center gap-2 font-heading font-semibold text-brand"
         >
           <Image src="/logo.png" alt="" width={24} height={24} className="rounded-sm" />
           HRUE

@@ -30,7 +30,7 @@ export function EntryForm({
               name="type"
               value="milestone"
               defaultChecked={defaultValues?.type !== "story"}
-              className="accent-gold"
+              className="accent-brand"
             />
             Milestone
           </label>
@@ -40,7 +40,7 @@ export function EntryForm({
               name="type"
               value="story"
               defaultChecked={defaultValues?.type === "story"}
-              className="accent-gold"
+              className="accent-brand"
             />
             Story
           </label>

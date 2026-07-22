@@ -35,7 +35,7 @@ export function MilestoneEntry({
         aria-expanded={expanded}
         aria-label={expanded ? "Collapse milestone" : "Expand milestone"}
         onClick={toggle}
-        className="absolute -left-[32px] top-1.5 size-3.5 rounded-full bg-gold ring-4 ring-gold/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+        className="absolute -left-[32px] top-1.5 size-3.5 rounded-full bg-brand ring-4 ring-brand/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
       />
       <div className="corner-brackets border bg-card p-4">
         <div className="flex items-baseline justify-between gap-4">
@@ -47,12 +47,12 @@ export function MilestoneEntry({
         {expanded ? (
           <EntryMarkdown
             body={entry.body}
-            className="mt-2 text-base text-muted-foreground"
+            className="mt-2 text-base leading-relaxed text-foreground"
           />
         ) : (
           <p
             ref={bodyRef}
-            className="mt-2 line-clamp-4 whitespace-pre-line text-base text-muted-foreground"
+            className="mt-2 line-clamp-4 whitespace-pre-line text-base leading-relaxed text-foreground"
           >
             {stripMarkdown(entry.body)}
           </p>
@@ -62,7 +62,7 @@ export function MilestoneEntry({
             type="button"
             aria-expanded={expanded}
             onClick={toggle}
-            className="mt-1 text-sm font-medium text-gold hover:text-gold-bright hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+            className="mt-1 text-sm font-medium text-brand hover:text-brand-bright hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
             {expanded ? "Show less" : "Show more"}
           </button>

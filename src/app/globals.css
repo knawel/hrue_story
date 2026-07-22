@@ -7,7 +7,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-space-grotesk);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -39,10 +39,9 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  --color-gold: var(--gold);
-  --color-gold-bright: var(--gold-bright);
+  --color-brand: var(--brand);
+  --color-brand-bright: var(--brand-bright);
   --color-silver: var(--silver);
-  --color-surface-raised: var(--surface-raised);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -53,50 +52,49 @@
 }
 
 /*
- * "Phoenix" theme — dark space-black + gold, one theme only, no toggle.
- * :root already holds the dark palette; `.dark` on <html> (see layout.tsx)
- * only exists so the handful of pre-existing `dark:` utility classes in
- * components/ui (button/input/textarea) resolve to their intended values.
+ * Light "archive" theme — warm off-white paper + deep oxblood accent, one
+ * theme only, no toggle. `.dark` is not applied on <html> (see layout.tsx);
+ * the pre-existing `dark:` utility classes in components/ui simply never
+ * match, which is intentional.
  */
 :root {
-  color-scheme: dark;
-  --background: #0b0c0f;
-  --foreground: #ecedef;
-  --card: #14161b;
-  --card-foreground: #ecedef;
-  --popover: #14161b;
-  --popover-foreground: #ecedef;
-  --primary: #e7a21e;
-  --primary-foreground: #0b0c0f;
-  --secondary: #1b1e24;
-  --secondary-foreground: #ecedef;
-  --muted: #1b1e24;
-  --muted-foreground: #9aa0a8;
-  --accent: #1b1e24;
-  --accent-foreground: #ecedef;
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: #262a31;
-  --input: #262a31;
-  --ring: #e7a21e;
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  color-scheme: light;
+  --background: #faf9f7;
+  --foreground: #1f2023;
+  --card: #ffffff;
+  --card-foreground: #1f2023;
+  --popover: #ffffff;
+  --popover-foreground: #1f2023;
+  --primary: #8c2f39;
+  --primary-foreground: #faf9f7;
+  --secondary: #f0eee9;
+  --secondary-foreground: #1f2023;
+  --muted: #f0eee9;
+  --muted-foreground: #6b6f76;
+  --accent: #f0eee9;
+  --accent-foreground: #1f2023;
+  --destructive: #b3261e;
+  --border: #e5e2dc;
+  --input: #e5e2dc;
+  --ring: #8c2f39;
+  --chart-1: oklch(0.269 0 0);
+  --chart-2: oklch(0.439 0 0);
+  --chart-3: oklch(0.556 0 0);
+  --chart-4: oklch(0.708 0 0);
+  --chart-5: oklch(0.87 0 0);
   --radius: 0.625rem;
-  --sidebar: #14161b;
-  --sidebar-foreground: #ecedef;
-  --sidebar-primary: #e7a21e;
-  --sidebar-primary-foreground: #0b0c0f;
-  --sidebar-accent: #1b1e24;
-  --sidebar-accent-foreground: #ecedef;
-  --sidebar-border: #262a31;
-  --sidebar-ring: #e7a21e;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1f2023;
+  --sidebar-primary: #8c2f39;
+  --sidebar-primary-foreground: #faf9f7;
+  --sidebar-accent: #f0eee9;
+  --sidebar-accent-foreground: #1f2023;
+  --sidebar-border: #e5e2dc;
+  --sidebar-ring: #8c2f39;
 
-  --gold: #e7a21e;
-  --gold-bright: #f5c65c;
-  --silver: #a8aeb6;
-  --surface-raised: #1b1e24;
+  --brand: #8c2f39;
+  --brand-bright: #a83a45;
+  --silver: #8a8f97;
 }
 
 @layer base {
@@ -107,7 +105,7 @@
     @apply bg-background text-foreground;
     background-image: radial-gradient(
       ellipse 80% 60% at 50% -10%,
-      color-mix(in oklab, var(--gold) 6%, var(--background)),
+      color-mix(in oklab, var(--brand) 4%, var(--background)),
       transparent 60%
     );
     background-repeat: no-repeat;
@@ -119,10 +117,11 @@
 
 @layer components {
   /*
-   * Sci-fi motif #1 — sharp gold corner brackets, milestone cards only.
-   * Two pseudo-elements, each drawing a diagonal pair of L-shaped corners as
-   * flat (single-color) gradients — crisp 1px lines, square joins, no
-   * rounding, no blur.
+   * Corner brackets, milestone cards only — a quiet neutral-border accent
+   * (not the brand color, so it doesn't compete with card body text for
+   * attention). Two pseudo-elements, each drawing a diagonal pair of
+   * L-shaped corners as flat (single-color) gradients — crisp 1px lines,
+   * square joins, no rounding, no blur.
    */
   .corner-brackets {
     position: relative;
@@ -139,10 +138,10 @@
   }
   .corner-brackets::before {
     background-image:
-      linear-gradient(var(--gold), var(--gold)),
-      linear-gradient(var(--gold), var(--gold)),
-      linear-gradient(var(--gold), var(--gold)),
-      linear-gradient(var(--gold), var(--gold));
+      linear-gradient(var(--border), var(--border)),
+      linear-gradient(var(--border), var(--border)),
+      linear-gradient(var(--border), var(--border)),
+      linear-gradient(var(--border), var(--border));
     background-position:
       top left,
       top left,
@@ -151,10 +150,10 @@
   }
   .corner-brackets::after {
     background-image:
-      linear-gradient(var(--gold), var(--gold)),
-      linear-gradient(var(--gold), var(--gold)),
-      linear-gradient(var(--gold), var(--gold)),
-      linear-gradient(var(--gold), var(--gold));
+      linear-gradient(var(--border), var(--border)),
+      linear-gradient(var(--border), var(--border)),
+      linear-gradient(var(--border), var(--border)),
+      linear-gradient(var(--border), var(--border));
     background-position:
       top right,
       top right,
@@ -163,10 +162,10 @@
   }
 
   /*
-   * Sci-fi motif #2 — the timeline spine as an instrument scale. A single
-   * pseudo-element draws the vertical line plus repeating perpendicular
-   * minor ticks; year markers add their own longer gold tick (see
-   * timeline.tsx) rather than being part of this repeating pattern.
+   * The timeline spine as an instrument scale. A single pseudo-element draws
+   * the vertical line plus repeating perpendicular minor ticks; year markers
+   * add their own longer brand-colored tick (see timeline.tsx) rather than
+   * being part of this repeating pattern.
    */
   .timeline-spine {
     position: relative;

@@ -29,7 +29,7 @@ export function EntryLinks({ entry }: { entry: Entry }) {
           href={href}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-sm text-gold transition-colors hover:border-gold-bright hover:text-gold-bright"
+          className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-sm text-brand transition-colors hover:border-brand-bright hover:text-brand-bright"
         >
           <Icon className="size-3" />
           {label}
