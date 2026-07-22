@@ -50,7 +50,10 @@ export function MilestoneEntry({
             className="mt-2 text-sm text-muted-foreground"
           />
         ) : (
-          <p ref={bodyRef} className="mt-2 line-clamp-4 text-sm text-muted-foreground">
+          <p
+            ref={bodyRef}
+            className="mt-2 line-clamp-4 whitespace-pre-line text-sm text-muted-foreground"
+          >
             {stripMarkdown(entry.body)}
           </p>
         )}
