@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Entry } from "@/lib/types";
 import { Role } from "@/lib/get-role";
 import { formatEntryDate } from "@/lib/format-entry-date";
+import { EntryLinks } from "@/components/entry-links";
+import { MilestoneEntry } from "@/components/milestone-entry";
 import { cn } from "@/lib/utils";
 
 export function Timeline({
@@ -37,103 +39,38 @@ export function Timeline({
               entry.type === "story" && "ml-6",
             )}
           >
-            <span
-              className={cn(
-                "absolute top-1.5 rounded-full",
-                entry.type === "milestone"
-                  ? "-left-[31px] size-3 bg-primary"
-                  : "-left-[37px] size-2 bg-muted-foreground",
-              )}
-            />
-            <div
-              className={cn(
-                "rounded-lg border p-4",
-                entry.type === "milestone" ? "bg-card shadow-sm" : "bg-muted/40",
-              )}
-            >
-              <div className="flex items-baseline justify-between gap-4">
-                <h3
-                  className={cn(
-                    entry.type === "milestone"
-                      ? "text-lg font-semibold"
-                      : "text-sm font-medium",
-                  )}
-                >
-                  {entry.title}
-                </h3>
-                <time className="shrink-0 text-xs text-muted-foreground">
-                  {formatEntryDate(entry.event_date, entry.date_precision)}
-                </time>
-              </div>
-              <p
-                className={cn(
-                  "mt-2 text-muted-foreground",
-                  entry.type === "milestone" ? "text-sm" : "text-xs",
-                )}
-              >
-                {entry.body}
-              </p>
-              {(entry.image_url ||
-                entry.youtube_url ||
-                entry.killboard_url ||
-                entry.other_url) && (
-                <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs">
-                  {entry.image_url && (
-                    <a
-                      href={entry.image_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline"
-                    >
-                      Image
-                    </a>
-                  )}
-                  {entry.youtube_url && (
-                    <a
-                      href={entry.youtube_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline"
-                    >
-                      Video
-                    </a>
-                  )}
-                  {entry.killboard_url && (
-                    <a
-                      href={entry.killboard_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline"
-                    >
-                      Battle report
-                    </a>
-                  )}
-                  {entry.other_url && (
-                    <a
-                      href={entry.other_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary hover:underline"
-                    >
-                      Link
-                    </a>
-                  )}
+            {entry.type === "milestone" ? (
+              <MilestoneEntry entry={entry} canEdit={canEdit} />
+            ) : (
+              <>
+                <span className="absolute -left-[37px] top-1.5 size-2 rounded-full bg-muted-foreground" />
+                <div className="rounded-lg border bg-muted/40 p-4">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <h3 className="text-sm font-medium">{entry.title}</h3>
+                    <time className="shrink-0 text-xs text-muted-foreground">
+                      {formatEntryDate(entry.event_date, entry.date_precision)}
+                    </time>
+                  </div>
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    {entry.body}
+                  </p>
+                  <EntryLinks entry={entry} />
+                  <div className="mt-3 flex items-baseline justify-between gap-4">
+                    <p className="text-xs text-muted-foreground">
+                      — {entry.author_name}
+                    </p>
+                    {canEdit && (
+                      <Link
+                        href={`/submit/${entry.id}`}
+                        className="text-xs font-medium text-primary hover:underline"
+                      >
+                        Edit
+                      </Link>
+                    )}
+                  </div>
                 </div>
-              )}
-              <div className="mt-3 flex items-baseline justify-between gap-4">
-                <p className="text-xs text-muted-foreground">
-                  — {entry.author_name}
-                </p>
-                {canEdit && (
-                  <Link
-                    href={`/submit/${entry.id}`}
-                    className="text-xs font-medium text-primary hover:underline"
-                  >
-                    Edit
-                  </Link>
-                )}
-              </div>
-            </div>
+              </>
+            )}
           </li>
         );
       })}
