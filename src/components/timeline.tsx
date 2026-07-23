@@ -6,6 +6,14 @@ import { Role } from "@/lib/get-role";
 import { MilestoneEntry } from "@/components/milestone-entry";
 import { StoryEntry } from "@/components/story-entry";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { cn } from "@/lib/utils";
 
 function yearOf(entry: Entry) {
@@ -22,6 +30,7 @@ export function Timeline({
   role?: Role | null;
 }) {
   const [showStories, setShowStories] = useState(false);
+  const [warningOpen, setWarningOpen] = useState(false);
 
   if (entries.length === 0) {
     return (
@@ -45,12 +54,44 @@ export function Timeline({
             variant="outline"
             size="sm"
             aria-pressed={showStories}
-            onClick={() => setShowStories((value) => !value)}
+            onClick={() =>
+              showStories ? setShowStories(false) : setWarningOpen(true)
+            }
           >
             {showStories ? "Hide stories" : `Show stories (${storyCount})`}
           </Button>
         </div>
       )}
+      <AlertDialog open={warningOpen} onOpenChange={setWarningOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>⚠️ Предупреждение</AlertDialogTitle>
+            <AlertDialogDescription>
+              {"Ни одна история не была проверена.\nВозможны неточности, художественные преувеличения и героические интерпретации событий."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setWarningOpen(false)}
+            >
+              Отмена
+            </Button>
+            <Button
+              type="button"
+              size="sm"
+              onClick={() => {
+                setShowStories(true);
+                setWarningOpen(false);
+              }}
+            >
+              Понятно, показать
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       {visibleEntries.length === 0 ? (
         <div className="rounded-lg border border-dashed py-16 text-center text-muted-foreground">
           No milestones yet.
