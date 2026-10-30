@@ -17,6 +17,7 @@ function rowToEntry(
     id: entry.id,
     type: entry.type,
     title: revision.title,
+    summary: revision.summary ?? undefined,
     body: revision.body,
     event_date: revision.eventDate,
     date_precision: revision.datePrecision,

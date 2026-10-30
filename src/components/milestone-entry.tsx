@@ -31,6 +31,10 @@ export function MilestoneEntry({
 
   const toggle = () => setExpanded((value) => !value);
 
+  // With a summary, the timeline shows it and expanding swaps in the full
+  // text. Without one, the body itself is clamped as before.
+  const summary = entry.summary?.trim();
+
   return (
     <>
       <button
@@ -47,7 +51,12 @@ export function MilestoneEntry({
             {formatEntryDate(entry.event_date, entry.date_precision, locale)}
           </time>
         </div>
-        {expanded ? (
+        {summary ? (
+          <EntryMarkdown
+            body={expanded ? entry.body : summary}
+            className="mt-2 text-base leading-relaxed text-foreground"
+          />
+        ) : expanded ? (
           <EntryMarkdown
             body={entry.body}
             className="mt-2 text-base leading-relaxed text-foreground"
@@ -60,14 +69,20 @@ export function MilestoneEntry({
             {stripMarkdown(entry.body)}
           </p>
         )}
-        {isClampable && (
+        {(summary || isClampable) && (
           <button
             type="button"
             aria-expanded={expanded}
             onClick={toggle}
             className="mt-1 text-sm font-medium text-brand hover:text-brand-bright hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
-            {expanded ? t("showLess") : t("showMore")}
+            {summary
+              ? expanded
+                ? t("showSummary")
+                : t("readFull")
+              : expanded
+                ? t("showLess")
+                : t("showMore")}
           </button>
         )}
         <EntryLinks entry={entry} />

@@ -43,6 +43,12 @@ export default async function ReviewPage() {
                 {formatEntryDate(entry.event_date, entry.date_precision, locale)}
               </time>
             </div>
+            {entry.summary && (
+              <p className="mt-2 text-base">
+                <span className="font-medium">{tEntry("summary")}:</span>{" "}
+                {entry.summary}
+              </p>
+            )}
             <p className="mt-2 text-base text-muted-foreground">{entry.body}</p>
             <p className="mt-2 text-sm text-muted-foreground">
               — {entry.author_name}
@@ -87,6 +93,12 @@ export default async function ReviewPage() {
                 {formatEntryDate(entry.event_date, entry.date_precision, locale)}
               </time>
             </div>
+            {entry.summary && (
+              <p className="mt-2 text-base">
+                <span className="font-medium">{tEntry("summary")}:</span>{" "}
+                {entry.summary}
+              </p>
+            )}
             <p className="mt-2 text-base text-muted-foreground">{entry.body}</p>
             <p className="mt-2 text-sm text-muted-foreground">
               — {entry.author_name}

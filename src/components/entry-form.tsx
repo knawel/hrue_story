@@ -61,6 +61,17 @@ export function EntryForm({
       </div>
 
       <div className="space-y-2">
+        <Label htmlFor="summary">{t("summary")}</Label>
+        <Textarea
+          id="summary"
+          name="summary"
+          rows={3}
+          defaultValue={defaultValues?.summary}
+        />
+        <p className="text-sm text-muted-foreground">{t("summaryHint")}</p>
+      </div>
+
+      <div className="space-y-2">
         <Label htmlFor="body">{t("body")}</Label>
         <Textarea
           id="body"

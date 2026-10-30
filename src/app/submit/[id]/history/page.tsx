@@ -17,10 +17,11 @@ export default async function EntryHistoryPage({
   const entry = await getEntryById(id);
   if (!entry) notFound();
 
-  const [revisions, locale, t] = await Promise.all([
+  const [revisions, locale, t, tEntry] = await Promise.all([
     getEntryRevisions(id),
     getLocale(),
     getTranslations("History"),
+    getTranslations("Entry"),
   ]);
 
   return (
@@ -46,6 +47,12 @@ export default async function EntryHistoryPage({
                 {formatEntryDate(revision.eventDate, revision.datePrecision, locale)}
               </time>
             </div>
+{revision.summary && (
+              <p className="mt-2 text-base">
+                <span className="font-medium">{tEntry("summary")}:</span>{" "}
+                {revision.summary}
+              </p>
+            )}
             <p className="mt-2 text-base text-muted-foreground">
               {revision.body}
             </p>

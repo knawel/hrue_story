@@ -12,6 +12,7 @@ import { DatePrecision, EntryType } from "@/lib/types";
 function readRevisionFields(formData: FormData) {
   return {
     title: String(formData.get("title") ?? ""),
+    summary: String(formData.get("summary") ?? "").trim() || null,
     body: String(formData.get("body") ?? ""),
     eventDate: String(formData.get("event_date") ?? ""),
     datePrecision: formData.get("date_precision") as DatePrecision,

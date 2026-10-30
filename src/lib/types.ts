@@ -6,6 +6,7 @@ export type Entry = {
   id: string;
   type: EntryType;
   title: string;
+  summary?: string;
   body: string;
   event_date: string;
   date_precision: DatePrecision;

@@ -28,7 +28,9 @@ export function StoryEntry({
   const [expanded, setExpanded] = useState(false);
   const locale = useLocale();
   const t = useTranslations("Entry");
+  const [showFull, setShowFull] = useState(false);
   const toggle = () => setExpanded((value) => !value);
+  const summary = entry.summary?.trim();
 
   return (
     <>
@@ -61,9 +63,19 @@ export function StoryEntry({
         {expanded && (
           <div className="border-t px-4 py-3">
             <EntryMarkdown
-              body={entry.body}
+              body={summary && !showFull ? summary : entry.body}
               className="text-base leading-relaxed text-foreground"
             />
+            {summary && (
+              <button
+                type="button"
+                aria-expanded={showFull}
+                onClick={() => setShowFull((value) => !value)}
+                className="mt-1 text-sm font-medium text-brand hover:text-brand-bright hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+              >
+                {showFull ? t("showSummary") : t("readFull")}
+              </button>
+            )}
             <EntryLinks entry={entry} />
             {canEdit && (
               <div className="mt-3 text-right">

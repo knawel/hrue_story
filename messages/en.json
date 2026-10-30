@@ -29,7 +29,10 @@
     "expandMilestone": "Expand milestone",
     "collapseMilestone": "Collapse milestone",
     "expandStory": "Expand story",
-    "collapseStory": "Collapse story"
+    "collapseStory": "Collapse story",
+    "readFull": "Read full version",
+    "showSummary": "Show summary",
+    "summary": "Summary"
   },
   "Links": {
     "video": "Watch video",
@@ -42,7 +45,7 @@
     "milestone": "Milestone",
     "story": "Story",
     "title": "Title",
-    "body": "Body",
+    "body": "Full text",
     "date": "Date",
     "precision": "Precision",
     "day": "Day",
@@ -53,7 +56,9 @@
     "killboardUrl": "Battle report / killmail (zKillboard) link (optional)",
     "otherUrl": "Other link (optional)",
     "submit": "Submit",
-    "saving": "Saving…"
+    "saving": "Saving…",
+    "summary": "Summary (optional)",
+    "summaryHint": "A short version shown on the timeline — the key points at a glance. Readers click through to the full text below. Leave empty for short entries."
   },
   "Submit": {
     "title": "Add an entry",

@@ -38,6 +38,8 @@ export const entryRevisions = pgTable("entry_revisions", {
     .notNull()
     .references(() => entries.id),
   title: text("title").notNull(),
+  // Optional short version shown on the timeline; `body` is the full text.
+  summary: text("summary"),
   body: text("body").notNull(),
   eventDate: date("event_date", { mode: "string" }).notNull(),
   datePrecision: datePrecision("date_precision").notNull(),
