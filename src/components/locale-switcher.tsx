@@ -10,7 +10,7 @@ export async function LocaleSwitcher() {
     <form
       action={setLocaleAction}
       aria-label={t("language")}
-      className="flex items-center gap-1 text-xs font-medium uppercase"
+      className="flex items-center gap-1 text-sm font-medium uppercase"
     >
       {locales.map((value, index) => (
         <span key={value} className="flex items-center gap-1">

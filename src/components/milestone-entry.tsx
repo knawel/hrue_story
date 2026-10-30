@@ -44,12 +44,14 @@ export function MilestoneEntry({
         onClick={toggle}
         className="absolute -left-[32px] top-1.5 size-3.5 rounded-full bg-brand ring-4 ring-brand/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
       />
-      <div className="corner-brackets border bg-card p-4">
+      <div className="rounded-lg border border-l-4 border-l-brand bg-card p-4 shadow-sm transition-shadow hover:shadow-md sm:p-5">
         <div className="flex items-baseline justify-between gap-4">
           <h3 className="text-xl font-semibold">{entry.title}</h3>
-          <time className="shrink-0 text-sm text-muted-foreground">
-            {formatEntryDate(entry.event_date, entry.date_precision, locale)}
-          </time>
+          {entry.date_precision !== "year" && (
+            <time className="shrink-0 rounded-full bg-muted px-2.5 py-0.5 text-sm text-muted-foreground">
+              {formatEntryDate(entry.event_date, entry.date_precision, locale)}
+            </time>
+          )}
         </div>
         {summary ? (
           <EntryMarkdown

@@ -41,7 +41,7 @@ export function StoryEntry({
         onClick={toggle}
         className="absolute -left-[37px] top-1.5 size-2 rounded-full bg-silver focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
       />
-      <div className="rounded-lg border bg-transparent">
+      <div className="rounded-lg border bg-card/60 transition-colors hover:bg-card">
         <button
           type="button"
           aria-expanded={expanded}
@@ -50,9 +50,11 @@ export function StoryEntry({
         >
           <span className="font-medium text-foreground">{entry.title}</span>
           <span className="text-muted-foreground">— {entry.author_name}</span>
-          <time className="text-muted-foreground">
-            {formatEntryDate(entry.event_date, entry.date_precision, locale)}
-          </time>
+          {entry.date_precision !== "year" && (
+            <time className="text-muted-foreground">
+              {formatEntryDate(entry.event_date, entry.date_precision, locale)}
+            </time>
+          )}
           {hasMedia(entry) && (
             <Paperclip
               aria-hidden="true"

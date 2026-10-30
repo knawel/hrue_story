@@ -10,12 +10,14 @@
     "language": "Language"
   },
   "Home": {
-    "tagline": "Holy Russian Empire — milestones and stories from across the corp, in one place."
+    "tagline": "Holy Russian Empire — milestones and stories from across the corp, in one place.",
+    "title": "Corporation Chronicle",
+    "stats": "{milestones, plural, one {# milestone} other {# milestones}} · {stories, plural, one {# story} other {# stories}} · since {since}"
   },
   "Timeline": {
     "empty": "No history yet. Sign in and add the first entry.",
     "noMilestones": "No milestones yet.",
-    "showStories": "Show stories ({count})",
+    "showStories": "Show member stories ({count})",
     "hideStories": "Hide stories",
     "warningTitle": "⚠️ Warning",
     "warningBody": "None of the stories have been verified.\nExpect inaccuracies, artistic exaggeration and heroic interpretations of events.",
@@ -102,5 +104,8 @@
   "Guide": {
     "title": "How to write for the chronicle",
     "link": "How it works — rules and tips →"
+  },
+  "Footer": {
+    "tagline": "Holy Russian Empire · the corporation chronicle"
   }
 }

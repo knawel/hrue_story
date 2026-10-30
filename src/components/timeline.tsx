@@ -6,6 +6,7 @@ import { Entry } from "@/lib/types";
 import { Role } from "@/lib/get-role";
 import { MilestoneEntry } from "@/components/milestone-entry";
 import { StoryEntry } from "@/components/story-entry";
+import { BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -50,16 +51,16 @@ export function Timeline({
   return (
     <div>
       {storyCount > 0 && (
-        <div className="mb-6 flex justify-end">
+        <div className="mb-8 flex justify-center">
           <Button
             type="button"
             variant="outline"
-            size="sm"
             aria-pressed={showStories}
             onClick={() =>
               showStories ? setShowStories(false) : setWarningOpen(true)
             }
           >
+            <BookOpen />
             {showStories
               ? t("hideStories")
               : t("showStories", { count: storyCount })}
@@ -117,8 +118,8 @@ export function Timeline({
                 {isNewYear && (
                   <li
                     className={cn(
-                      "relative pb-2 text-sm font-semibold tracking-wide text-brand",
-                      index !== 0 && "pt-4",
+                      "sticky top-0 z-10 bg-background/85 py-2 text-base font-semibold tracking-wide text-brand backdrop-blur-sm",
+                      index !== 0 && "mt-4",
                     )}
                   >
                     <span className="absolute -left-[33px] top-1/2 h-px w-[18px] -translate-y-1/2 bg-brand" />

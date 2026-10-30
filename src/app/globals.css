@@ -116,79 +116,18 @@
 }
 
 @layer components {
-  /*
-   * Corner brackets, milestone cards only — a quiet neutral-border accent
-   * (not the brand color, so it doesn't compete with card body text for
-   * attention). Two pseudo-elements, each drawing a diagonal pair of
-   * L-shaped corners as flat (single-color) gradients — crisp 1px lines,
-   * square joins, no rounding, no blur.
-   */
-  .corner-brackets {
-    position: relative;
-    border-radius: 0;
-  }
-  .corner-brackets::before,
-  .corner-brackets::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-repeat: no-repeat;
-    background-size: 16px 1px, 1px 16px, 16px 1px, 1px 16px;
-  }
-  .corner-brackets::before {
-    background-image:
-      linear-gradient(var(--border), var(--border)),
-      linear-gradient(var(--border), var(--border)),
-      linear-gradient(var(--border), var(--border)),
-      linear-gradient(var(--border), var(--border));
-    background-position:
-      top left,
-      top left,
-      bottom right,
-      bottom right;
-  }
-  .corner-brackets::after {
-    background-image:
-      linear-gradient(var(--border), var(--border)),
-      linear-gradient(var(--border), var(--border)),
-      linear-gradient(var(--border), var(--border)),
-      linear-gradient(var(--border), var(--border));
-    background-position:
-      top right,
-      top right,
-      bottom left,
-      bottom left;
-  }
-
-  /*
-   * The timeline spine as an instrument scale. A single pseudo-element draws
-   * the vertical line plus repeating perpendicular minor ticks; year markers
-   * add their own longer brand-colored tick (see timeline.tsx) rather than
-   * being part of this repeating pattern.
-   */
+  /* The timeline spine: one quiet vertical line behind the markers. */
   .timeline-spine {
     position: relative;
   }
   .timeline-spine::before {
     content: "";
     position: absolute;
-    left: -4px;
+    left: 0;
     top: 0;
     bottom: 0;
-    width: 8px;
-    background-image:
-      linear-gradient(var(--border), var(--border)),
-      repeating-linear-gradient(
-        to bottom,
-        var(--border) 0,
-        var(--border) 1px,
-        transparent 1px,
-        transparent 24px
-      );
-    background-size: 1px 100%, 8px 24px;
-    background-position: 4px 0, 0 0;
-    background-repeat: no-repeat, repeat;
+    width: 1px;
+    background: var(--border);
     pointer-events: none;
   }
 }
