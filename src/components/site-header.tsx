@@ -1,10 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Show, SignInButton, UserButton } from "@clerk/nextjs";
+import { getTranslations } from "next-intl/server";
+import { LocaleSwitcher } from "@/components/locale-switcher";
 import { getRole } from "@/lib/get-role";
 
 export async function SiteHeader() {
-  const role = await getRole();
+  const [role, t] = await Promise.all([getRole(), getTranslations("Header")]);
 
   return (
     <header className="border-b">
@@ -19,18 +21,19 @@ export async function SiteHeader() {
         <div className="flex items-center gap-4 text-sm">
           {(role === "member" || role === "officer") && (
             <Link href="/submit" className="font-medium hover:underline">
-              Add entry
+              {t("addEntry")}
             </Link>
           )}
           {role === "officer" && (
             <Link href="/review" className="font-medium hover:underline">
-              Review
+              {t("review")}
             </Link>
           )}
+          <LocaleSwitcher />
           <Show when="signed-out">
             <SignInButton mode="modal">
               <button className="font-medium hover:underline">
-                Sign in
+                {t("signIn")}
               </button>
             </SignInButton>
           </Show>

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Entry } from "@/lib/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,12 +10,14 @@ import { SubmitButton } from "@/components/submit-button";
 export function EntryForm({
   action,
   defaultValues,
-  submitLabel = "Submit",
+  submitLabel,
 }: {
   action: (formData: FormData) => void | Promise<void>;
   defaultValues?: Partial<Entry>;
   submitLabel?: string;
 }) {
+  const t = useTranslations("Form");
+
   return (
     <form action={action} className="space-y-6">
       {defaultValues?.id && (
@@ -22,7 +25,7 @@ export function EntryForm({
       )}
 
       <div className="space-y-2">
-        <Label>Type</Label>
+        <Label>{t("type")}</Label>
         <div className="flex gap-4 text-sm">
           <label className="flex items-center gap-2">
             <input
@@ -32,7 +35,7 @@ export function EntryForm({
               defaultChecked={defaultValues?.type !== "story"}
               className="accent-brand"
             />
-            Milestone
+            {t("milestone")}
           </label>
           <label className="flex items-center gap-2">
             <input
@@ -42,13 +45,13 @@ export function EntryForm({
               defaultChecked={defaultValues?.type === "story"}
               className="accent-brand"
             />
-            Story
+            {t("story")}
           </label>
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="title">Title</Label>
+        <Label htmlFor="title">{t("title")}</Label>
         <Input
           id="title"
           name="title"
@@ -58,7 +61,7 @@ export function EntryForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="body">Body</Label>
+        <Label htmlFor="body">{t("body")}</Label>
         <Textarea
           id="body"
           name="body"
@@ -74,7 +77,7 @@ export function EntryForm({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="event_date">Date</Label>
+          <Label htmlFor="event_date">{t("date")}</Label>
           <Input
             id="event_date"
             name="event_date"
@@ -84,22 +87,22 @@ export function EntryForm({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="date_precision">Precision</Label>
+          <Label htmlFor="date_precision">{t("precision")}</Label>
           <select
             id="date_precision"
             name="date_precision"
             defaultValue={defaultValues?.date_precision ?? "day"}
             className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-base outline-none transition-colors focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm"
           >
-            <option value="day">Day</option>
-            <option value="month">Month</option>
-            <option value="year">Year</option>
+            <option value="day">{t("day")}</option>
+            <option value="month">{t("month")}</option>
+            <option value="year">{t("year")}</option>
           </select>
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="image_url">Image URL (optional)</Label>
+        <Label htmlFor="image_url">{t("imageUrl")}</Label>
         <Input
           id="image_url"
           name="image_url"
@@ -109,7 +112,7 @@ export function EntryForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="youtube_url">YouTube link (optional)</Label>
+        <Label htmlFor="youtube_url">{t("youtubeUrl")}</Label>
         <Input
           id="youtube_url"
           name="youtube_url"
@@ -121,7 +124,7 @@ export function EntryForm({
 
       <div className="space-y-2">
         <Label htmlFor="killboard_url">
-          Battle report / killmail (zKillboard) link (optional)
+          {t("killboardUrl")}
         </Label>
         <Input
           id="killboard_url"
@@ -133,7 +136,7 @@ export function EntryForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="other_url">Other link (optional)</Label>
+        <Label htmlFor="other_url">{t("otherUrl")}</Label>
         <Input
           id="other_url"
           name="other_url"
@@ -142,7 +145,7 @@ export function EntryForm({
         />
       </div>
 
-      <SubmitButton>{submitLabel}</SubmitButton>
+      <SubmitButton>{submitLabel ?? t("submit")}</SubmitButton>
     </form>
   );
 }

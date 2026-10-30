@@ -1,0 +1,93 @@
+{
+  "Metadata": {
+    "title": "HRUE — Corporation Chronicle",
+    "description": "A crowd-sourced history timeline of the HRUE corporation."
+  },
+  "Header": {
+    "addEntry": "Add entry",
+    "review": "Review",
+    "signIn": "Sign in",
+    "language": "Language"
+  },
+  "Home": {
+    "tagline": "Holy Russian Empire — milestones and stories from across the corp, in one place."
+  },
+  "Timeline": {
+    "empty": "No history yet. Sign in and add the first entry.",
+    "noMilestones": "No milestones yet.",
+    "showStories": "Show stories ({count})",
+    "hideStories": "Hide stories",
+    "warningTitle": "⚠️ Warning",
+    "warningBody": "None of the stories have been verified.\nExpect inaccuracies, artistic exaggeration and heroic interpretations of events.",
+    "cancel": "Cancel",
+    "confirmShow": "Got it, show them"
+  },
+  "Entry": {
+    "edit": "Edit",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "expandMilestone": "Expand milestone",
+    "collapseMilestone": "Collapse milestone",
+    "expandStory": "Expand story",
+    "collapseStory": "Collapse story"
+  },
+  "Links": {
+    "video": "Watch video",
+    "battleReport": "Battle report",
+    "image": "Image",
+    "link": "Link"
+  },
+  "Form": {
+    "type": "Type",
+    "milestone": "Milestone",
+    "story": "Story",
+    "title": "Title",
+    "body": "Body",
+    "date": "Date",
+    "precision": "Precision",
+    "day": "Day",
+    "month": "Month",
+    "year": "Year",
+    "imageUrl": "Image URL (optional)",
+    "youtubeUrl": "YouTube link (optional)",
+    "killboardUrl": "Battle report / killmail (zKillboard) link (optional)",
+    "otherUrl": "Other link (optional)",
+    "submit": "Submit",
+    "saving": "Saving…"
+  },
+  "Submit": {
+    "title": "Add an entry",
+    "intro": "Stories publish immediately. Milestones need officer approval before they show up on the public timeline."
+  },
+  "Edit": {
+    "title": "Edit entry",
+    "intro": "Saving creates a new revision — the previous text is kept, never overwritten.",
+    "save": "Save changes",
+    "viewHistory": "View revision history",
+    "hiddenNotice": "This entry is hidden from the public timeline.",
+    "hideNotice": "Hiding drops this entry from the public timeline. It stays in the record and can be un-hidden.",
+    "hide": "Hide entry",
+    "hiding": "Hiding…",
+    "unhide": "Un-hide entry",
+    "unhiding": "Un-hiding…"
+  },
+  "History": {
+    "title": "Revision history",
+    "current": "(current)",
+    "back": "Back to edit"
+  },
+  "Review": {
+    "title": "Review queue",
+    "intro": "Pending milestones awaiting approval.",
+    "nothingPending": "Nothing pending.",
+    "approve": "Approve",
+    "approving": "Approving…",
+    "reject": "Reject",
+    "rejecting": "Rejecting…",
+    "hiddenTitle": "Hidden entries",
+    "hiddenIntro": "Off the public timeline, still in the record.",
+    "nothingHidden": "Nothing hidden.",
+    "unhide": "Un-hide",
+    "unhiding": "Un-hiding…"
+  }
+}

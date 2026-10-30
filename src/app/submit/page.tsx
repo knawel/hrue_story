@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { EntryForm } from "@/components/entry-form";
 import { submitEntryAction } from "@/lib/actions";
 import { getRole } from "@/lib/get-role";
@@ -7,15 +8,14 @@ export default async function SubmitPage() {
   const role = await getRole();
   if (!role) redirect("/");
 
+  const t = await getTranslations("Submit");
+
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
       <h1 className="font-heading text-2xl font-semibold text-brand">
-        Add an entry
+        {t("title")}
       </h1>
-      <p className="mt-2 text-muted-foreground">
-        Stories publish immediately. Milestones need officer approval before
-        they show up on the public timeline.
-      </p>
+      <p className="mt-2 text-muted-foreground">{t("intro")}</p>
       <div className="mt-8">
         <EntryForm action={submitEntryAction} />
       </div>

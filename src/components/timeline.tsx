@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Entry } from "@/lib/types";
 import { Role } from "@/lib/get-role";
 import { MilestoneEntry } from "@/components/milestone-entry";
@@ -31,11 +32,12 @@ export function Timeline({
 }) {
   const [showStories, setShowStories] = useState(false);
   const [warningOpen, setWarningOpen] = useState(false);
+  const t = useTranslations("Timeline");
 
   if (entries.length === 0) {
     return (
       <div className="rounded-lg border border-dashed py-16 text-center text-muted-foreground">
-        No history yet. Sign in and add the first entry.
+        {t("empty")}
       </div>
     );
   }
@@ -58,16 +60,18 @@ export function Timeline({
               showStories ? setShowStories(false) : setWarningOpen(true)
             }
           >
-            {showStories ? "Hide stories" : `Show stories (${storyCount})`}
+            {showStories
+              ? t("hideStories")
+              : t("showStories", { count: storyCount })}
           </Button>
         </div>
       )}
       <AlertDialog open={warningOpen} onOpenChange={setWarningOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>⚠️ Предупреждение</AlertDialogTitle>
+            <AlertDialogTitle>{t("warningTitle")}</AlertDialogTitle>
             <AlertDialogDescription>
-              {"Ни одна история не была проверена.\nВозможны неточности, художественные преувеличения и героические интерпретации событий."}
+              {t("warningBody")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -77,7 +81,7 @@ export function Timeline({
               size="sm"
               onClick={() => setWarningOpen(false)}
             >
-              Отмена
+              {t("cancel")}
             </Button>
             <Button
               type="button"
@@ -87,14 +91,14 @@ export function Timeline({
                 setWarningOpen(false);
               }}
             >
-              Понятно, показать
+              {t("confirmShow")}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
       {visibleEntries.length === 0 ? (
         <div className="rounded-lg border border-dashed py-16 text-center text-muted-foreground">
-          No milestones yet.
+          {t("noMilestones")}
         </div>
       ) : (
         <ol className="timeline-spine relative pl-6">

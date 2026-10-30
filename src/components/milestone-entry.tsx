@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { Entry } from "@/lib/types";
 import { formatEntryDate } from "@/lib/format-entry-date";
 import { EntryLinks } from "@/components/entry-links";
@@ -18,6 +19,8 @@ export function MilestoneEntry({
   const [expanded, setExpanded] = useState(false);
   const [isClampable, setIsClampable] = useState(false);
   const bodyRef = useRef<HTMLParagraphElement>(null);
+  const locale = useLocale();
+  const t = useTranslations("Entry");
 
   // Measured once, while collapsed (the default state) — if the clamped
   // body is shorter than the full text, there's something to expand.
@@ -33,7 +36,7 @@ export function MilestoneEntry({
       <button
         type="button"
         aria-expanded={expanded}
-        aria-label={expanded ? "Collapse milestone" : "Expand milestone"}
+        aria-label={expanded ? t("collapseMilestone") : t("expandMilestone")}
         onClick={toggle}
         className="absolute -left-[32px] top-1.5 size-3.5 rounded-full bg-brand ring-4 ring-brand/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
       />
@@ -41,7 +44,7 @@ export function MilestoneEntry({
         <div className="flex items-baseline justify-between gap-4">
           <h3 className="text-xl font-semibold">{entry.title}</h3>
           <time className="shrink-0 text-sm text-muted-foreground">
-            {formatEntryDate(entry.event_date, entry.date_precision)}
+            {formatEntryDate(entry.event_date, entry.date_precision, locale)}
           </time>
         </div>
         {expanded ? (
@@ -64,7 +67,7 @@ export function MilestoneEntry({
             onClick={toggle}
             className="mt-1 text-sm font-medium text-brand hover:text-brand-bright hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           >
-            {expanded ? "Show less" : "Show more"}
+            {expanded ? t("showLess") : t("showMore")}
           </button>
         )}
         <EntryLinks entry={entry} />
@@ -77,7 +80,7 @@ export function MilestoneEntry({
               href={`/submit/${entry.id}`}
               className="text-sm font-medium text-muted-foreground hover:text-foreground hover:underline"
             >
-              Edit
+              {t("edit")}
             </Link>
           )}
         </div>

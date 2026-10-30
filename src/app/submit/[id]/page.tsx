@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
+import { getTranslations } from "next-intl/server";
 import { EntryForm } from "@/components/entry-form";
 import { SubmitButton } from "@/components/submit-button";
 import {
@@ -27,20 +28,19 @@ export default async function EditEntryPage({
   const canEdit = role === "officer" || entry.owner_id === userId;
   if (!canEdit) redirect("/");
 
+  const t = await getTranslations("Edit");
+
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
       <h1 className="font-heading text-2xl font-semibold text-brand">
-        Edit entry
+        {t("title")}
       </h1>
-      <p className="mt-2 text-muted-foreground">
-        Saving creates a new revision — the previous text is kept, never
-        overwritten.
-      </p>
+      <p className="mt-2 text-muted-foreground">{t("intro")}</p>
       <div className="mt-8">
         <EntryForm
           action={editEntryAction}
           defaultValues={entry}
-          submitLabel="Save changes"
+          submitLabel={t("save")}
         />
       </div>
       {role === "officer" && (
@@ -49,7 +49,7 @@ export default async function EditEntryPage({
             href={`/submit/${entry.id}/history`}
             className="text-sm font-medium text-muted-foreground hover:text-foreground hover:underline"
           >
-            View revision history
+            {t("viewHistory")}
           </Link>
           <form
             action={entry.hidden ? unhideEntryAction : hideEntryAction}
@@ -57,15 +57,13 @@ export default async function EditEntryPage({
           >
             <input type="hidden" name="id" value={entry.id} />
             <p className="mb-3 text-sm text-muted-foreground">
-              {entry.hidden
-                ? "This entry is hidden from the public timeline."
-                : "Hiding drops this entry from the public timeline. It stays in the record and can be un-hidden."}
+              {entry.hidden ? t("hiddenNotice") : t("hideNotice")}
             </p>
             <SubmitButton
               variant={entry.hidden ? "outline" : "destructive"}
-              pendingLabel={entry.hidden ? "Un-hiding…" : "Hiding…"}
+              pendingLabel={entry.hidden ? t("unhiding") : t("hiding")}
             >
-              {entry.hidden ? "Un-hide entry" : "Hide entry"}
+              {entry.hidden ? t("unhide") : t("hide")}
             </SubmitButton>
           </form>
         </div>

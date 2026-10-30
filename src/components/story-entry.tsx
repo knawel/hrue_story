@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { Paperclip } from "lucide-react";
 import { Entry } from "@/lib/types";
 import { formatEntryDate } from "@/lib/format-entry-date";
@@ -25,6 +26,8 @@ export function StoryEntry({
   canEdit: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const locale = useLocale();
+  const t = useTranslations("Entry");
   const toggle = () => setExpanded((value) => !value);
 
   return (
@@ -32,7 +35,7 @@ export function StoryEntry({
       <button
         type="button"
         aria-expanded={expanded}
-        aria-label={expanded ? "Collapse story" : "Expand story"}
+        aria-label={expanded ? t("collapseStory") : t("expandStory")}
         onClick={toggle}
         className="absolute -left-[37px] top-1.5 size-2 rounded-full bg-silver focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
       />
@@ -46,7 +49,7 @@ export function StoryEntry({
           <span className="font-medium text-foreground">{entry.title}</span>
           <span className="text-muted-foreground">— {entry.author_name}</span>
           <time className="text-muted-foreground">
-            {formatEntryDate(entry.event_date, entry.date_precision)}
+            {formatEntryDate(entry.event_date, entry.date_precision, locale)}
           </time>
           {hasMedia(entry) && (
             <Paperclip
@@ -68,7 +71,7 @@ export function StoryEntry({
                   href={`/submit/${entry.id}`}
                   className="text-sm font-medium text-muted-foreground hover:text-foreground hover:underline"
                 >
-                  Edit
+                  {t("edit")}
                 </Link>
               </div>
             )}

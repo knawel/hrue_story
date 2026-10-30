@@ -4,16 +4,18 @@ import {
   Swords,
   Video,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Entry } from "@/lib/types";
 
 const LINK_CHIPS = [
-  { field: "youtube_url", icon: Video, label: "Watch video" },
-  { field: "killboard_url", icon: Swords, label: "Battle report" },
-  { field: "image_url", icon: ImageIcon, label: "Image" },
-  { field: "other_url", icon: LinkIcon, label: "Link" },
+  { field: "youtube_url", icon: Video, label: "video" },
+  { field: "killboard_url", icon: Swords, label: "battleReport" },
+  { field: "image_url", icon: ImageIcon, label: "image" },
+  { field: "other_url", icon: LinkIcon, label: "link" },
 ] as const;
 
 export function EntryLinks({ entry }: { entry: Entry }) {
+  const t = useTranslations("Links");
   const links = LINK_CHIPS.flatMap(({ field, icon: Icon, label }) => {
     const href = entry[field];
     return href ? [{ href, icon: Icon, label, field }] : [];
@@ -32,7 +34,7 @@ export function EntryLinks({ entry }: { entry: Entry }) {
           className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-sm text-brand transition-colors hover:border-brand-bright hover:text-brand-bright"
         >
           <Icon className="size-3" />
-          {label}
+          {t(label)}
         </a>
       ))}
     </div>

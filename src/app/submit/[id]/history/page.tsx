@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
+import { getLocale, getTranslations } from "next-intl/server";
 import { formatEntryDate } from "@/lib/format-entry-date";
 import { getEntryById, getEntryRevisions } from "@/lib/get-entries";
 import { getRole } from "@/lib/get-role";
@@ -16,12 +17,16 @@ export default async function EntryHistoryPage({
   const entry = await getEntryById(id);
   if (!entry) notFound();
 
-  const revisions = await getEntryRevisions(id);
+  const [revisions, locale, t] = await Promise.all([
+    getEntryRevisions(id),
+    getLocale(),
+    getTranslations("History"),
+  ]);
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
       <h1 className="font-heading text-2xl font-semibold text-brand">
-        Revision history
+        {t("title")}
       </h1>
       <p className="mt-2 text-muted-foreground">{entry.title}</p>
 
@@ -33,12 +38,12 @@ export default async function EntryHistoryPage({
                 {revision.title}
                 {index === 0 && (
                   <span className="ml-2 text-sm font-normal text-muted-foreground">
-                    (current)
+                    {t("current")}
                   </span>
                 )}
               </h2>
               <time className="shrink-0 text-sm text-muted-foreground">
-                {formatEntryDate(revision.eventDate, revision.datePrecision)}
+                {formatEntryDate(revision.eventDate, revision.datePrecision, locale)}
               </time>
             </div>
             <p className="mt-2 text-base text-muted-foreground">
@@ -46,7 +51,7 @@ export default async function EntryHistoryPage({
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
               — {revision.authorName} ·{" "}
-              {new Date(revision.createdAt).toLocaleString("en-US", {
+              {new Date(revision.createdAt).toLocaleString(locale, {
                 dateStyle: "medium",
                 timeStyle: "short",
               })}
@@ -59,7 +64,7 @@ export default async function EntryHistoryPage({
         href={`/submit/${id}`}
         className="mt-8 inline-block text-sm font-medium text-muted-foreground hover:text-foreground hover:underline"
       >
-        Back to edit
+        {t("back")}
       </Link>
     </div>
   );
