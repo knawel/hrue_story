@@ -28,7 +28,10 @@ export default async function EditEntryPage({
   const canEdit = role === "officer" || entry.owner_id === userId;
   if (!canEdit) redirect("/");
 
-  const t = await getTranslations("Edit");
+  const [t, tGuide] = await Promise.all([
+    getTranslations("Edit"),
+    getTranslations("Guide"),
+  ]);
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-12">
@@ -36,6 +39,12 @@ export default async function EditEntryPage({
         {t("title")}
       </h1>
       <p className="mt-2 text-muted-foreground">{t("intro")}</p>
+      <Link
+        href="/guide"
+        className="mt-2 inline-block text-sm font-medium text-brand hover:text-brand-bright hover:underline"
+      >
+        {tGuide("link")}
+      </Link>
       <div className="mt-8">
         <EntryForm
           action={editEntryAction}

@@ -69,6 +69,7 @@ export function EntryForm({
               name="type"
               value="milestone"
               defaultChecked={defaultValues?.type !== "story"}
+              disabled={!!defaultValues?.id}
               className="accent-brand"
             />
             {t("milestone")}
@@ -79,11 +80,15 @@ export function EntryForm({
               name="type"
               value="story"
               defaultChecked={defaultValues?.type === "story"}
+              disabled={!!defaultValues?.id}
               className="accent-brand"
             />
             {t("story")}
           </label>
         </div>
+        {defaultValues?.id && (
+          <p className="text-sm text-muted-foreground">{t("typeFixed")}</p>
+        )}
       </div>
 
       <div className="space-y-2">

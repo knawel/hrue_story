@@ -61,7 +61,8 @@
     "summaryHint": "A short version shown on the timeline — the key points at a glance. Readers click through to the full text below. Leave empty for short entries.",
     "addQuote": "Add quote",
     "quotePlaceholder": "Quote text",
-    "quoteAuthorPlaceholder": "Author"
+    "quoteAuthorPlaceholder": "Author",
+    "typeFixed": "The type can't be changed after an entry is created."
   },
   "Submit": {
     "title": "Add an entry",
@@ -97,5 +98,9 @@
     "nothingHidden": "Nothing hidden.",
     "unhide": "Un-hide",
     "unhiding": "Un-hiding…"
+  },
+  "Guide": {
+    "title": "How to write for the chronicle",
+    "link": "How it works — rules and tips →"
   }
 }

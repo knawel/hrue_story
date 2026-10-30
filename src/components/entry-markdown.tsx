@@ -121,9 +121,12 @@ const components: Components = {
 export function EntryMarkdown({
   body,
   className,
+  overrides,
 }: {
   body: string;
   className?: string;
+  // Lets non-entry pages (the guide) render real headings, tables, etc.
+  overrides?: Components;
 }) {
   return (
     <div
@@ -135,7 +138,7 @@ export function EntryMarkdown({
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeQuoteAttribution]}
-        components={components}
+        components={{ ...components, ...overrides }}
       >
         {body}
       </ReactMarkdown>

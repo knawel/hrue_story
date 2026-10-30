@@ -8,10 +8,14 @@ import {
 } from "@/lib/db/schema";
 import { Entry } from "@/lib/types";
 
+// Content comes from the latest revision; authorship from the first, so an
+// officer's later edit never re-credits the entry to the officer. The name is
+// that author's most recent one, so a changed handle reaches old entries too.
 function rowToEntry(
   entry: EntryRow,
   revision: EntryRevisionRow,
-  ownerId: string,
+  original: EntryRevisionRow,
+  authorName: string,
 ): Entry {
   return {
     id: entry.id,
@@ -25,9 +29,9 @@ function rowToEntry(
     youtube_url: revision.youtubeUrl ?? undefined,
     killboard_url: revision.killboardUrl ?? undefined,
     other_url: revision.otherUrl ?? undefined,
-    author_id: revision.authorId,
-    author_name: revision.authorName,
-    owner_id: ownerId,
+    author_id: original.authorId,
+    author_name: authorName,
+    owner_id: original.authorId,
     status: entry.status,
     hidden: entry.hidden,
     created_at: entry.createdAt,
@@ -45,8 +49,8 @@ function byEventDateThenCreatedAt(a: Entry, b: Entry) {
 // Entries + their latest revision, joined in application code rather than
 // SQL — simplest correct way to get "one row per entry" without a
 // DISTINCT ON / window-function query, and cheap at this app's scale.
-// Also picks out each entry's *earliest* revision author as its owner, since
-// ownership is fixed at creation and must survive later edits by an officer.
+// Also picks out each entry's *earliest* revision, whose author is the entry's
+// owner and credited author — both fixed at creation, surviving later edits.
 async function withLatestRevision(entryRows: EntryRow[]): Promise<Entry[]> {
   if (entryRows.length === 0) return [];
 
@@ -62,20 +66,42 @@ async function withLatestRevision(entryRows: EntryRow[]): Promise<Entry[]> {
     .orderBy(entryRevisionsTable.createdAt);
 
   const latestByEntryId = new Map<string, EntryRevisionRow>();
-  const ownerIdByEntryId = new Map<string, string>();
+  const firstByEntryId = new Map<string, EntryRevisionRow>();
   for (const revision of revisionRows) {
-    if (!ownerIdByEntryId.has(revision.entryId)) {
-      ownerIdByEntryId.set(revision.entryId, revision.authorId);
+    if (!firstByEntryId.has(revision.entryId)) {
+      firstByEntryId.set(revision.entryId, revision);
     }
     latestByEntryId.set(revision.entryId, revision);
   }
 
+  const nameRows = await getDb()
+    .selectDistinctOn([entryRevisionsTable.authorId], {
+      authorId: entryRevisionsTable.authorId,
+      authorName: entryRevisionsTable.authorName,
+    })
+    .from(entryRevisionsTable)
+    .where(
+      inArray(
+        entryRevisionsTable.authorId,
+        [...firstByEntryId.values()].map((revision) => revision.authorId),
+      ),
+    )
+    .orderBy(entryRevisionsTable.authorId, desc(entryRevisionsTable.createdAt));
+  const latestNameByAuthorId = new Map(
+    nameRows.map((row) => [row.authorId, row.authorName]),
+  );
+
   return entryRows
     .map((entry) => {
       const revision = latestByEntryId.get(entry.id);
-      const ownerId = ownerIdByEntryId.get(entry.id);
-      return revision && ownerId
-        ? rowToEntry(entry, revision, ownerId)
+      const original = firstByEntryId.get(entry.id);
+      return revision && original
+        ? rowToEntry(
+            entry,
+            revision,
+            original,
+            latestNameByAuthorId.get(original.authorId) ?? original.authorName,
+          )
         : undefined;
     })
     .filter((entry): entry is Entry => entry !== undefined);
