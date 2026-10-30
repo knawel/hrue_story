@@ -58,7 +58,10 @@
     "submit": "Submit",
     "saving": "Saving…",
     "summary": "Summary (optional)",
-    "summaryHint": "A short version shown on the timeline — the key points at a glance. Readers click through to the full text below. Leave empty for short entries."
+    "summaryHint": "A short version shown on the timeline — the key points at a glance. Readers click through to the full text below. Leave empty for short entries.",
+    "addQuote": "Add quote",
+    "quotePlaceholder": "Quote text",
+    "quoteAuthorPlaceholder": "Author"
   },
   "Submit": {
     "title": "Add an entry",

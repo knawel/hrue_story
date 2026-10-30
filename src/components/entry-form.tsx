@@ -1,11 +1,14 @@
 "use client";
 
+import { useRef } from "react";
 import { useTranslations } from "next-intl";
+import { Quote } from "lucide-react";
 import { Entry } from "@/lib/types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { SubmitButton } from "@/components/submit-button";
+import { Button } from "@/components/ui/button";
 
 export function EntryForm({
   action,
@@ -17,6 +20,39 @@ export function EntryForm({
   submitLabel?: string;
 }) {
   const t = useTranslations("Form");
+  const bodyRef = useRef<HTMLTextAreaElement>(null);
+
+  // Wraps the selection (or a placeholder) in a Markdown quote with an
+  // attribution line, then selects the part the author should type over.
+  function insertQuote() {
+    const el = bodyRef.current;
+    if (!el) return;
+
+    const { selectionStart: start, selectionEnd: end, value } = el;
+    const selected = value.slice(start, end).trim();
+    const quote = selected || t("quotePlaceholder");
+    const author = t("quoteAuthorPlaceholder");
+
+    const before = value.slice(0, start);
+    const after = value.slice(end);
+    const lead = before === "" || before.endsWith("\n\n") ? "" : before.endsWith("\n") ? "\n" : "\n\n";
+    const tail = after === "" || after.startsWith("\n\n") ? "" : after.startsWith("\n") ? "\n" : "\n\n";
+
+    const quoteLines = quote
+      .split("\n")
+      .map((line) => `> ${line}`.trimEnd())
+      .join("\n");
+    const head = `${lead}${quoteLines}\n>\n> — `;
+    el.setRangeText(`${head}${author}${tail}`, start, end);
+
+    el.focus();
+    if (selected) {
+      el.setSelectionRange(start + head.length, start + head.length + author.length);
+    } else {
+      const quoteStart = start + lead.length + 2;
+      el.setSelectionRange(quoteStart, quoteStart + quote.length);
+    }
+  }
 
   return (
     <form action={action} className="space-y-6">
@@ -78,12 +114,19 @@ export function EntryForm({
           name="body"
           required
           rows={5}
+          ref={bodyRef}
           defaultValue={defaultValues?.body}
         />
-        <p className="text-sm text-muted-foreground">
-          <code>**bold**</code> <code>*italic*</code>{" "}
-          <code>[text](url)</code> <code>- list</code>
-        </p>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-sm text-muted-foreground">
+            <code>**bold**</code> <code>*italic*</code>{" "}
+            <code>[text](url)</code> <code>- list</code> <code>&gt; quote</code>
+          </p>
+          <Button type="button" variant="outline" size="sm" onClick={insertQuote}>
+            <Quote />
+            {t("addQuote")}
+          </Button>
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
